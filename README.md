@@ -1,2 +1,24 @@
-# DODO-digital-library
-API RESTful para gerenciamento de uma plataforma de biblioteca digital. Este sistema permite que usuários autenticados cadastrem, busquem, visualizem e gerenciem diversos tipos de materiais, como livros, artigos e vídeos. Cada material pode ser associado a um ou mais autores, que podem ser pessoas físicas ou instituições.
+# README
+
+This README would normally document whatever steps are necessary to get the
+application up and running.
+
+Things you may want to cover:
+
+* Ruby version
+
+* System dependencies
+
+* Configuration
+
+* Database creation
+
+* Database initialization
+
+* How to run the test suite
+
+* Services (job queues, cache servers, search engines, etc.)
+
+* Deployment instructions
+
+* ...
