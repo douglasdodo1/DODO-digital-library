@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  doi: MyString
+  material: one
+  publication_date: MyString
+  language: MyString
+
+two:
+  doi: MyString
+  material: two
+  publication_date: MyString
+  language: MyString

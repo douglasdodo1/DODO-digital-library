@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  material: one
+  Video: MyString
+  duration_minutes: 1
+
+two:
+  material: two
+  Video: MyString
+  duration_minutes: 1

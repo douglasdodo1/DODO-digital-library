@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  isbn: MyString
+  p: MyString
+  material: one
+  age_numbers: 1
+
+two:
+  isbn: MyString
+  p: MyString
+  material: two
+  age_numbers: 1
