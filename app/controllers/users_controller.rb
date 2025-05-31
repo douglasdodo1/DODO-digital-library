@@ -41,11 +41,11 @@ class UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params.expect(:id))
+      @user = User.find(params.expect(:cpf))
     end
 
     # Only allow a list of trusted parameters through.
     def user_params
-      params.expect(user: [ :cpf, :mail, :password ])
+      params.expect(user: [ :cpf, :name, :mail, :password ])
     end
 end
