@@ -1,10 +1,10 @@
 class User < ApplicationRecord
   self.primary_key = "cpf"
 
-  validate :valid_cpf
+  # validate :valid_cpf
   validates :name, presence: true, length: { minimum: 2, maximum: 30 }
   validates :mail, presence: true, uniqueness: true
-  validates :password, presence: true
+  validates :password, presence: true, lenght: { minimum: 6 }
 
   def valid_cpf
     if cpf.blank? || cpf.length != 11
@@ -14,6 +14,11 @@ class User < ApplicationRecord
 
     unless cpf.match?(/\A\d+\z/)
       errors.add(:cpf, "cpf must contain only numbers")
+      return
+    end
+
+    if cpf.chars.uniq.length == 1
+      errors.add(:cpf, "cannot be a sequence of the same digit")
       return
     end
 
@@ -32,6 +37,7 @@ class User < ApplicationRecord
 
     unless first_number_check == number_cpf[9]
       errors.add(:cpf, "cpf not is valid")
+      return
     end
 
     sum = 0
