@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :articles
   resources :books
   resources :materials
-  resources :users
+  resources :users, param: :cpf
   resources :institutions
   resources :people
   resources :authors
