@@ -11,12 +11,15 @@ class Person < ApplicationRecord
       return
     end
 
-    unless birth_date.is_a?(Date)
+    date = Date.parse(birth_date.to_s) rescue nil
+
+
+    if date.nil?
       errors.add(:birth_date, "must be a valid date")
       return
     end
 
-    if birth_date.present? && birth_date > Date.today
+    if date > Date.today
       errors.add(:birth_date, "can't be in the future")
     end
   end
