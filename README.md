@@ -4,6 +4,7 @@ DODO Digital Library is a web application built with Ruby on Rails 8.0.2, design
 
 ---
 
+<<<<<<< HEAD
 ## 🚀 Technologies Used
 
 This project leverages a modern and powerful stack:
@@ -39,6 +40,10 @@ To get the DODO Digital Library up and running on your local machine, follow the
 
     ```bash
     git clone [https://github.com/douglasdodo1/DODO-digital-library.git](https://github.com/douglasdodo1/DODO-digital-library.git)
+=======
+1.  Clonar o repositório
+    git clone https://github.com/douglasdodo1/DODO-digital-library.git
+>>>>>>> 192d1b4fb04486e108640189272df04461de8cee
     cd dodo-digital-library
     ```
 
