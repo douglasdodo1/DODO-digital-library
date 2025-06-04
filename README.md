@@ -15,7 +15,7 @@ Tecnologias Utilizadas
   Instalação e Configuração
 
 1.  Clonar o repositório
-    git clone <URL_DO_REPOSITORIO>
+    git clone https://github.com/douglasdodo1/DODO-digital-library.git
     cd dodo-digital-library
 
 2.  Instalar dependências
