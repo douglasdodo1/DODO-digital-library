@@ -3,18 +3,17 @@ module Mutations
     class UpdatePerson < Mutations::BaseMutation
       description "Atualiza os dados de uma pessoa existente pelo ID."
 
-      argument :id, ID, required: true, description: "ID único da pessoa a ser atualizada."
-      argument :name, String, required: false, description: "Novo nome da pessoa."
-      argument :birthDate, GraphQL::Types::ISO8601Date, required: false, description: "Nova data de nascimento da pessoa no formato 'YYYY-MM-DD'."
+      argument :input, Types::Person::UpdatePersonInput, required: true
 
       type Types::Person::PersonPayload
 
-      def resolve(id:, name: nil, birthDate: nil)
-        person = ::Person.find_by!(id: id)
+      def resolve(input:)
+        person = ::Person.find_by!(id: input.id)
         author = ::Author.find_by!(id: person.author_id)
 
-        author.update!(name: author.name || name)
-        person.update!(birth_date: person.birth_date || birthDate)
+        author.update!(name: input.name) if input.name.present?
+        person.update!(birth_date: input.birth_date) if input.birth_date.present?
+
         { person: person, errors: [] }
       end
     end

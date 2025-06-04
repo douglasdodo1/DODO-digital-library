@@ -8,14 +8,19 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 6 }
 
   def valid_cpf
-    if cpf.blank? || cpf.length != 11
-    errors.add(:cpf, "cpf must contain exactly 11 digits")
-    return
+    if cpf.nil?
+      errors.add(:cpf, "can't be blank")
+      return
     end
 
     unless cpf.match?(/\A\d+\z/)
-      errors.add(:cpf, "cpf must contain only numbers")
+      errors.add(:cpf, "must contain only numbers")
       return
+    end
+
+    if cpf.length != 11
+    errors.add(:cpf, "must contain exactly 11 digits")
+    return
     end
 
     if cpf.chars.uniq.length == 1
@@ -37,7 +42,7 @@ class User < ApplicationRecord
     first_number_check = 0 if first_number_check == 10
 
     unless first_number_check == number_cpf[9]
-      errors.add(:cpf, "cpf not is valid")
+      errors.add(:cpf, "is not valid")
       return
     end
 
