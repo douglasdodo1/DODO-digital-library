@@ -1,10 +1,11 @@
 class User < ApplicationRecord
   self.primary_key = "cpf"
+  has_secure_password
 
-  # validate :valid_cpf
+  validate :valid_cpf
   validates :name, presence: true, length: { minimum: 2, maximum: 30 }
   validates :mail, presence: true, uniqueness: true
-  validates :password, presence: true, lenght: { minimum: 6 }
+  validates :password, presence: true, length: { minimum: 6 }
 
   def valid_cpf
     if cpf.blank? || cpf.length != 11
@@ -50,7 +51,7 @@ class User < ApplicationRecord
     second_number_check = 0 if second_number_check == 10
 
     unless second_number_check == number_cpf[10]
-      errors.add(:cpf, "cpf is not valid")
+      errors.add(:cpf, "is not valid")
     end
   end
 end
