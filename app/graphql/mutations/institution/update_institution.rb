@@ -3,18 +3,17 @@ module Mutations
     class UpdateInstitution < Mutations::BaseMutation
       description "Atualiza os dados de uma instituição existente."
 
-      argument :id, ID, required: true, description: "ID único da instituição a ser atualizada."
-      argument :name, String, required: false, description: "Novo nome da instituição."
-      argument :city, String, required: false, description: "Nova cidade da instituição."
+      argument :input, Types::Institution::UpdateInstitutionInput, required: true
 
       type Types::Institution::InstitutionPayload
 
-      def resolve(id:, name: nil, city: nil)
-        institution = ::Institution.find_by!(id: id)
+      def resolve(input:)
+        institution = ::Institution.find_by!(id: input.id)
         author = ::Author.find_by!(id: institution.author_id)
 
-        author.update!(name: author.name || name)
-        institution.update!(city: institution.city || city)
+        author.update!(name: input.name) if input.name.present?
+        institution.update!(city: input.city) if input.city.present?
+
         { institution: institution, errors: [] }
       end
     end

@@ -18,4 +18,4 @@ production:
   <<: *default
   database: dodo_library_db_production
   username: postgres
-  password: <%= ENV['DATABASE_PASSWORD'] %> # para segurança no production
+  password: <%= ENV['DATABASE_PASSWORD'] %>
