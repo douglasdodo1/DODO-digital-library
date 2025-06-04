@@ -27,3 +27,4 @@ end
 gem "rspec-rails", "~> 8.0", :group => :test
 gem 'factory_bot_rails', :group => :test
 gem 'faker', :group => :test
+gem 'shoulda-matchers', :group => :test
