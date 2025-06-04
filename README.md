@@ -40,12 +40,11 @@ To get the DODO Digital Library up and running on your local machine, follow the
 
     ```bash
     git clone [https://github.com/douglasdodo1/DODO-digital-library.git](https://github.com/douglasdodo1/DODO-digital-library.git)
-=======
+
 1.  Clonar o repositório
     git clone https://github.com/douglasdodo1/DODO-digital-library.git
->>>>>>> 192d1b4fb04486e108640189272df04461de8cee
     cd dodo-digital-library
-    ```
+    
 
 2.  **Install dependencies:**
 
@@ -190,7 +189,6 @@ The application adheres to the following business logic to ensure data integrity
 
 Before running the tests, please adjust the test CPF in `spec/support/test_constants.rb` to a **real, valid CPF**:
 
-````ruby
 # spec/support/test_constants.rb
 CPF_TEST = "YOUR_VALID_CPF_HERE"
 Then, execute the tests with:
