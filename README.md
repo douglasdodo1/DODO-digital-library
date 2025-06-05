@@ -190,7 +190,7 @@ The application adheres to the following business logic to ensure data integrity
 Before running the tests, please adjust the test CPF in `spec/support/test_constants.rb` to a **real, valid CPF**:
 
 # spec/support/test_constants.rb
-CPF_TEST = "YOUR_VALID_CPF_HERE"
+CPF_TEST = "YOUR_VALID_CPF_HERE" <-only number
 Then, execute the tests with:
 
 Bash
