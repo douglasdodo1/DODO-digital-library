@@ -1,7 +1,7 @@
 puts "Loading TestConstants module..."
 
 module TestConstants
-  CPF_TEST = "12085172440"
+  CPF_TEST = "CPF HERE" 
 end
 
 RSpec.configure do |config|
