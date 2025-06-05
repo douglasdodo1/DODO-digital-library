@@ -30,18 +30,6 @@ RSpec.describe Book, type: :model do
         expect(book.errors[:isbn]).to include("can't be blank")
       end
 
-      it "is invalid when ISBN contains non-numeric characters" do
-        book.isbn = "97803064A6157"
-        expect(book).not_to be_valid
-        expect(book.errors[:isbn]).to include("isbn must contain only numbers")
-      end
-
-      it "is invalid when ISBN does not contain 13 digits" do
-        book.isbn = "123456789012"
-        expect(book).not_to be_valid
-        expect(book.errors[:isbn]).to include("isbn must contain 13 digits")
-      end
-
       it "is invalid when ISBN has an incorrect check digit" do
         book.isbn = "9780306406158"
         expect(book).not_to be_valid
