@@ -1,0 +1,46 @@
+services:
+  backend:
+    build: ./backend
+    volumes:
+      - .:/backend/app
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - db
+    environment:
+      DATABASE_HOST: db
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: 1234
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "bin/rails", "db:check", "arg"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./frontend:/app
+    networks:
+      - app-network
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: dodo_digital_library_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
