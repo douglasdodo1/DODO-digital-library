@@ -20,6 +20,7 @@ services:
       timeout: 30s
       retries: 5
       start_period: 30s
+    command: bash -c "bundle exec rails db:create db:migrate && bundle exec rails server -b 0.0.0.0"
 
   frontend:
     build: ./frontend
@@ -39,7 +40,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1234
     ports:
-      - "5432:5432"
+      - "5433:5432"
     networks:
       - app-network
 
