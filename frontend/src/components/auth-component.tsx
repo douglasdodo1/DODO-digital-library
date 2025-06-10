@@ -13,7 +13,6 @@ export default function AuthComponent() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 flex items-center justify-center p-4">
-      {/* decorações atrás */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <BookOpen className="absolute top-10 left-10 text-amber-200/30 -rotate-12" size={120} />
         <Library className="absolute bottom-20 right-20 text-orange-200/30 rotate-12" size={100} />
@@ -37,7 +36,7 @@ export default function AuthComponent() {
         </CardHeader>
 
         <CardContent className="p-6 space-y-6">
-          {isLogin ? <LoginComponent isLogin={isLogin} setIsLogin={setIsLogin} /> : <RegisterComponent />}
+          {isLogin ? <LoginComponent setIsLogin={setIsLogin} /> : <RegisterComponent />}
           <Separator />
           <div className="text-center space-y-2">
             <p className="text-sm text-amber-700">{isLogin ? "Não tem uma conta?" : "Já tem uma conta?"}</p>

@@ -6,10 +6,9 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 interface Props {
-  isLogin: boolean;
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
-export function LoginComponent({ isLogin, setIsLogin }: Props) {
+export function LoginComponent({ setIsLogin }: Props) {
   const form = useForm();
 
   const [showPassword, setShowPassword] = useState(false);
