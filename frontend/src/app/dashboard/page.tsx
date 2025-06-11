@@ -12,17 +12,83 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { Plus } from "lucide-react";
-import { useState } from "react";
-import { Header } from "@/components/header";
+import { Badge, Book, BookOpen, Calendar, Clock, FileText, Plus, Video } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
+import { Header } from "@/components/header";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+import { CreateBookInput } from "@/dtos/createBookInput";
+import axios from "axios";
+
+const QUERY = `
+  mutation CreateBook($input: CreateBookInput!) {
+    createBook(input: $input) {
+      book {
+        isbn
+        pageNumbers
+        material {
+          title
+          description
+          status
+          author {
+            name
+          }
+        }
+      }
+      errors
+    }
+  }
+`;
 
 export default function Dashboard() {
+  const [activeTab, setActiveTab] = useState("livros");
+
   const [isAddDialogOpen, setIsAddDialogOpen] = useState<boolean>(false);
   const [contentType, setContentType] = useState<string>("livro");
+  const [bookList, setBookList] = useState<CreateBookInput[]>([]);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/graphql",
+          {
+            query: QUERY,
+            variables: {
+              input: {
+                isbn: "9788566229202",
+                pageNumbers: 200,
+                title: "O Livro das Estrelas",
+                description: "Uma aventura pelo cosmos.",
+                status: "publicado",
+                authorName: "Dr. Stella Nova",
+                authorType: "person",
+                personDateOfBirth: "1970-01-15",
+              },
+            },
+          },
+          {
+            headers: {
+              Authorization:
+                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJjcGYiOiI3NjkxMjg4ODA4OSIsImV4cCI6MTc0OTcwMTg5NX0.yOCrqzHt1dgCPNF6Yc0FyPz4dhRCxDiXL_Lh1AA1oA8",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log(response);
+      } catch (error) {
+        console.error("Erro ao buscar livros:", error);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
       <Header />
+
       <div className="flex justify-center w-full">
         <div className="flex flex-row pt-12 w-3/4  justify-between items-center mb-8">
           <div>
