@@ -6,5 +6,5 @@ export interface MaterialDto {
   description?: string;
   status: string;
   authorId: string;
-  author?: AuthorDto;
+  author: AuthorDto;
 }

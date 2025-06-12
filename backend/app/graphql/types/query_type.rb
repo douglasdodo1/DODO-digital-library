@@ -21,7 +21,8 @@ module Types
       description "Retorna um livro dado o ISBN"
       argument :isbn, String, required: true
     end
-    field :all_books_by_cpf, [Types::Book::BookType], null: false do
+    field :all_books, [Types::Book::BookType], null: true do
+      description "Retorna todos os livros"
     end
 
     field :video_by_id, Types::Video::VideoType, null: true do
@@ -29,9 +30,17 @@ module Types
       argument :id, ID, required: true
     end
 
+    field :all_videos, [Types::Video::VideoType], null: true do
+      description "Retorna todos os videos"
+    end
+
     field :article_by_doi, Types::Article::ArticleType, null: true do
       description "Retorna um artigo dado o DOI"
       argument :doi, String, required: true
+    end
+
+    field :all_articles, [Types::Article::ArticleType], null: true do
+      description "Retorna todos os artigos"
     end
 
     field :search_materials, Types::Material::MaterialType.connection_type, null: false do
@@ -66,20 +75,24 @@ module Types
       ::Video.includes(material: :author).find_by(id: id)
     end
 
+    def all_videos()
+      ::Video.includes(material: :author)
+    end
+
     def article_by_doi(doi:)
       ::Article.find_by(doi: doi)
+    end
+
+    def all_articles()
+      ::Article.includes(material: :author)
     end
 
     def book_by_isbn(isbn:)
       ::Book.find_by(isbn: isbn)
     end
 
-    def all_books_by_cpf()
-      pp "CPF recebido no contexto:"
-
-      cpf = context[:current_user].cpf
-      puts "CPF recebido no contexto: #{cpf.inspect}"
-      ::Book.eager_load(:material).where(materials: { user_cpf: cpf })
+    def all_books()
+      ::Book.includes(material: :author)
     end
 
   end

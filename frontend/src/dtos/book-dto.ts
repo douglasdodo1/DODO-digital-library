@@ -1,7 +1,7 @@
 import { MaterialDto } from "./material-dto";
 
-export interface VideoDto {
-  id: string;
-  durationMinutes: number;
+export interface BookDto {
+  isbn: string;
+  pageNumbers: number;
   material: MaterialDto;
 }
