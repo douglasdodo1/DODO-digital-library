@@ -1,7 +1,10 @@
-import { MaterialDto } from "./material-dto";
-
 export interface CreateBookInput {
   isbn: string;
-  page_numbers: number;
-  material: MaterialDto;
+  pageNumbers: number;
+  title: string;
+  description?: string;
+  status: string;
+  authorName: string;
+  authorType: string;
+  personDateOfBirth: string;
 }
