@@ -1,8 +1,9 @@
-export const ALL_BOOKS_BY_CPF = `
-  query AllBooksByCpf {
-    allBooksByCpf {
-      isbn
-      pageNumbers
+export const ALL_ARTICLES = `
+  query AllArticles {
+    allArticles {
+      doi
+      publicationDate
+      language
       material {
         title
         description

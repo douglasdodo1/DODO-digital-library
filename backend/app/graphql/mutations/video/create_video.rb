@@ -33,12 +33,14 @@ module Mutations
           raise GraphQL::ExecutionError, "Tipo de autor inválido: #{input[:authorType]}"
         end
 
+        userCpf = context[:current_user].cpf
+
         material = ::Material.create!(
           title: input[:title],
           description: input[:description],
           status: input[:status],
           author_id: author.id,
-          user_cpf: input[:userCpf]
+          user_cpf: userCpf
         )
 
         video = ::Video.create!(

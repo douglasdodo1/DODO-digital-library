@@ -1,4 +1,4 @@
 export interface AuthorDto {
-  id: string;
+  id?: string;
   name: string;
 }
