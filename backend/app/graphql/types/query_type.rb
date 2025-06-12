@@ -21,6 +21,8 @@ module Types
       description "Retorna um livro dado o ISBN"
       argument :isbn, String, required: true
     end
+    field :all_books_by_cpf, [Types::Book::BookType], null: false do
+    end
 
     field :video_by_id, Types::Video::VideoType, null: true do
       description "Retorna um video dado o ID"
@@ -71,5 +73,14 @@ module Types
     def book_by_isbn(isbn:)
       ::Book.find_by(isbn: isbn)
     end
+
+    def all_books_by_cpf()
+      pp "CPF recebido no contexto:"
+
+      cpf = context[:current_user].cpf
+      puts "CPF recebido no contexto: #{cpf.inspect}"
+      ::Book.eager_load(:material).where(materials: { user_cpf: cpf })
+    end
+
   end
 end
