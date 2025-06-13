@@ -5,11 +5,13 @@ export const ALL_VIDEOS = `
       durationMinutes
       material {
         title
+        category
         description
         status
         author {
           name
         }
+        publicationDate
       }
     }
   }

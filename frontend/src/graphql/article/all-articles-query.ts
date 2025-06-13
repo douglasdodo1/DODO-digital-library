@@ -2,15 +2,16 @@ export const ALL_ARTICLES = `
   query AllArticles {
     allArticles {
       doi
-      publicationDate
       language
       material {
         title
+        category
         description
         status
         author {
           name
         }
+        publicationDate
       }
     }
   }

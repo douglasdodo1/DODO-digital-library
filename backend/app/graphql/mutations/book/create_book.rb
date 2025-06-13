@@ -40,6 +40,7 @@ module Mutations
 
         material = ::Material.create!(
           title: input[:title],
+          category: input[:category],
           description: input[:description],
           status: input[:status],
           author_id: author.id,

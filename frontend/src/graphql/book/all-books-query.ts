@@ -5,11 +5,13 @@ export const ALL_BOOKS = `
       pageNumbers
       material {
         title
+        category
         description
         status
         author {
           name
         }
+        publicationDate
       }
     }
   }

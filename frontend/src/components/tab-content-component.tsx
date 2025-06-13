@@ -2,14 +2,14 @@
 import { ArticleDto } from "@/dtos/article-dto";
 import { BookDto } from "@/dtos/book-dto";
 import { VideoDto } from "@/dtos/video-dto";
-import { BookOpen, Edit, FileText, Video } from "lucide-react";
+import { BookOpen, Calendar, Edit, FileText, Video } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./ui/card";
 import { TabsContent } from "./ui/tabs";
 import { useState } from "react";
 import { DialogEditMaterial } from "./dialog-edit-material";
+import { Badge } from "./ui/badge";
 
-// União de tipos para materiais
 type Material = BookDto | ArticleDto | VideoDto;
 
 interface Props {
@@ -29,10 +29,12 @@ function getKey(material: Material): string {
   return Math.random().toString();
 }
 
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString("pt-BR");
+}
+
 export function TabContentComponent({ materialList, value }: Props) {
-  // Estado do diálogo de edição
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  // editingItem pode ser Material ou null
   const [editingItem, setEditingItem] = useState<Material | null>(null);
 
   const handleEditContent = (item: Material) => {
@@ -61,6 +63,7 @@ export function TabContentComponent({ materialList, value }: Props) {
                   ) : (
                     <Video size={24} className="text-amber-600 mb-2" />
                   )}
+                  <Badge className="bg-amber-100 text-amber-800">{material.material.category}</Badge>
                 </div>
                 <CardTitle className="text-amber-800">{material.material?.title ?? "Sem título"}</CardTitle>
                 <CardDescription className="text-amber-600">
@@ -69,7 +72,11 @@ export function TabContentComponent({ materialList, value }: Props) {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-gray-600 mb-6">{material.material?.description ?? "Sem descrição"}</p>
-                <div className="w-full flex justify-end">
+                <div className="w-full flex justify-between">
+                  <div className="flex items-center text-xs text-amber-600">
+                    <Calendar className="w-3 h-3 mr-1" />
+                    {formatDate(material.material.publicationDate)}
+                  </div>
                   <Button
                     onClick={() => handleEditContent(material)}
                     size="sm"

@@ -112,22 +112,24 @@ export default function DashboardComponent() {
                       <Input id="categoria" placeholder="Ex: Literatura, Ciências" required />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="ano">
-                        {contentType === "livro"
-                          ? "Ano de Publicação"
-                          : contentType === "artigo"
-                          ? "Data de Publicação"
-                          : "Duração"}
-                      </Label>
-                      <Input
-                        id="ano"
-                        placeholder={
-                          contentType === "livro" ? "2024" : contentType === "artigo" ? "dd/mm/aaaa" : "mm:ss"
-                        }
-                        required
-                      />
+                      <Label htmlFor="dataPublicacao">Data de Publicação</Label>
+                      <Input id="dataPublicacao" placeholder="dd/mm/aaaa" required />
                     </div>
                   </div>
+
+                  {contentType === "livro" && (
+                    <div className="space-y-2">
+                      <Label htmlFor="paginas">Número de Páginas</Label>
+                      <Input id="paginas" placeholder="Ex: 350" required />
+                    </div>
+                  )}
+
+                  {contentType === "video" && (
+                    <div className="space-y-2">
+                      <Label htmlFor="duracao">Duração</Label>
+                      <Input id="duracao" placeholder="Ex: 12:34" required />
+                    </div>
+                  )}
 
                   <div className="space-y-2">
                     <Label htmlFor="descricao">Descrição</Label>
