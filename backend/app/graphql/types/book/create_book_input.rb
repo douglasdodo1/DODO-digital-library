@@ -12,6 +12,8 @@ module Types
       argument :personDateOfBirth, GraphQL::Types::ISO8601Date, required: false, description: "Data de nascimento do autor, obrigatória se authorType for 'person'."
       argument :institutionCity, String, required: false, description: "Cidade da instituição, obrigatória se authorType for 'institution'."
       argument :pageNumbers, Integer, required: true, description: "Número total de páginas do livro."
+      argument :publicationDate , GraphQL::Types::ISO8601Date, required: false, description: "Data de publicação do livro."
+
     end
   end
 end

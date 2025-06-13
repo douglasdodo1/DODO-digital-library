@@ -37,7 +37,8 @@ module Mutations
           title: input[:title] || material.title,
           author_id: author&.id || material.author_id,
           description: input[:description] || material.description,
-          status: input[:status] || material.status
+          status: input[:status] || material.status,
+          publication_date: input[:publicationDate] || material.publication_date
         )
 
         article.update!(

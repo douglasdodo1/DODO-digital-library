@@ -9,6 +9,8 @@ module Types
       field :userCpf, String, null: false, method: :user_cpf
       field :author, Types::Author::AuthorType, null: false
       field :user, Types::User::UserType, null: false
+      field :publicationDate, GraphQL::Types::ISO8601Date, null: false
+
 
       def author
         object.author
@@ -16,6 +18,10 @@ module Types
 
       def user
         object.user
+      end
+
+      def publicationDate
+        object.publication_date
       end
     end
   end

@@ -39,7 +39,9 @@ module Mutations
           description: input.description,
           status: input.status,
           user_cpf: userCpf,
-          author_id: author.id
+          author_id: author.id,
+          publication_date: input[:publicationDate]
+
         )
 
         article = ::Article.create!(
