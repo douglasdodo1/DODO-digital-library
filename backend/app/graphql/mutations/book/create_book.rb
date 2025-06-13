@@ -43,7 +43,8 @@ module Mutations
           description: input[:description],
           status: input[:status],
           author_id: author.id,
-          user_cpf: userCpf
+          user_cpf: userCpf,
+          publication_date: input[:publicationDate]
         )
 
         number_isbn = input[:isbn].gsub(/\D/, '')

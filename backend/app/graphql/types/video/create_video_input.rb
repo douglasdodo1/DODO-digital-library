@@ -11,6 +11,8 @@ module Types
       argument :authorType, String, required: true, description: "Tipo do autor: 'person' para pessoa física ou 'institution' para instituição."
       argument :personDateOfBirth, GraphQL::Types::ISO8601Date, required: false, description: "Data de nascimento do autor (obrigatória se authorType for 'person')."
       argument :institutionCity, String, required: false, description: "Cidade da instituição (obrigatória se authorType for 'institution')."
+            argument :publicationDate , GraphQL::Types::ISO8601Date, required: false, description: "Data de publicação do video."
+
     end
   end
 end
