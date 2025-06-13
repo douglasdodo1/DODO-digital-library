@@ -36,6 +36,7 @@ module Mutations
 
         material = ::Material.create!(
           title: input.title,
+          category: input[:category],
           description: input.description,
           status: input.status,
           user_cpf: userCpf,
@@ -47,7 +48,6 @@ module Mutations
         article = ::Article.create!(
           doi: input.doi,
           material_id: material.id,
-          publication_date: input.publication_date,
           language: input.language
         )
 

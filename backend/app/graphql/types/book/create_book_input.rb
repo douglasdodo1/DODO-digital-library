@@ -5,6 +5,7 @@ module Types
 
       argument :isbn, String, required: true, description: "ISBN do livro, identificador único internacional."
       argument :title, String, required: true, description: "Título do livro."
+      argument :category, String, required: false, description: "Categoria do livro."
       argument :description, String, required: false, description: "Descrição opcional do livro."
       argument :status, String, required: true, description: "Status do material ('rascunho', 'publicado' e 'enviado')."
       argument :authorName, String, required: true, description: "Nome do autor do livro."

@@ -9,7 +9,7 @@ export const getAllArticles = async () => {
     },
     {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjcGYiOiIxMjA4NTE3MjQ0MCIsImV4cCI6MTc0OTgyNjE0N30.CRUPjG4cpWGBpADFivUhwVvgGK3CT-4B744d7YBQvbs`,
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjcGYiOiIxMjA4NTE3MjQ0MCIsImV4cCI6MTc0OTkxMDQ0NX0.Xma8Kwm-Arx4b7_g_i43Gmy4TrryidJTO6cNvMQPx80`,
         "Content-Type": "application/json",
       },
     }

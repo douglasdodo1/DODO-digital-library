@@ -4,6 +4,7 @@ module Types
       description "Campos necessários para criar um novo artigo e seu material associado."
 
       argument :doi, String, required: true, description: "Identificador digital do artigo (DOI - Digital Object Identifier). Deve ser único."
+      argument :category, String, required: false, description: "Categoria do material relacionado ao artigo."
       argument :title, String, required: true, description: "Título do material relacionado ao artigo."
       argument :description, String, required: false, description: "Descrição opcional do material."
       argument :status, String, required: true, description: "Status do material ('rascunho', 'publicado' e 'enviado')."
