@@ -1,4 +1,4 @@
-import { CreateVideoInput } from "@/dtos/create-video-input";
+import { CreateVideoInput } from "@/app/inputs/create-video-input";
 import axios from "axios";
 import { CREATE_VIDEO } from "../query/create-video-input";
 
