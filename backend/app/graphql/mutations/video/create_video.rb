@@ -43,7 +43,6 @@ module Mutations
           author_id: author.id,
           user_cpf: userCpf,
           publication_date: input[:publicationDate]
-
         )
 
         video = ::Video.create!(

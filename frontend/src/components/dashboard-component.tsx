@@ -49,7 +49,13 @@ export default function DashboardComponent() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
       <Header />
-      <DialogCreateMaterial isCreateDialogOpen={isCreateDialogOpen} setIsCreateDialogOpen={setIsCreateDialogOpen} />
+      <DialogCreateMaterial
+        setBookList={setBookList}
+        setArticleList={setArticleList}
+        setVideoList={setVideoList}
+        isCreateDialogOpen={isCreateDialogOpen}
+        setIsCreateDialogOpen={setIsCreateDialogOpen}
+      />
       <div className="flex flex-col justify-center w-full">
         <div className="flex  pt-12 w-full justify-center items-center mb-8">
           <div className="w-3/4 flex flex-row justify-between ">
@@ -60,8 +66,7 @@ export default function DashboardComponent() {
             <div>
               <Button
                 size="sm"
-                variant="outline"
-                className="text-amber-600 border-amber-300 hover:bg-amber-50"
+                className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700"
                 onClick={() => setIsCreateDialogOpen(true)}
               >
                 + adicionar conteudo

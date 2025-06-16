@@ -12,7 +12,7 @@ export async function createBook(input: CreateBookInput) {
       },
       {
         headers: {
-          Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjcGYiOiIxMjA4NTE3MjQ0MCIsImV4cCI6MTc0OTgyNjE0N30.CRUPjG4cpWGBpADFivUhwVvgGK3CT-4B744d7YBQvbs`,
+          Authorization: `Bearer ${localStorage["token"]}`,
           "Content-Type": "application/json",
         },
       }

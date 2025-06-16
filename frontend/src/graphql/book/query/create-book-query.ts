@@ -11,6 +11,8 @@ export const CREATE_BOOK = `
           author {
             name
           }
+          publicationDate
+          category
         }
       }
       errors

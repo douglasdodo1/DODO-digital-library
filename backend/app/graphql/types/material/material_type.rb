@@ -3,7 +3,7 @@ module Types
     class MaterialType < Types::BaseObject
       field :id, ID, null: false
       field :title, String, null: false
-      field :category, String, null: true
+      field :category, String, null: false
       field :description, String, null: true
       field :status, String, null: false
       field :authorId, ID, null: false, method: :author_id
