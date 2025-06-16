@@ -2,13 +2,14 @@
 import { ArticleDto } from "@/dtos/article-dto";
 import { BookDto } from "@/dtos/book-dto";
 import { VideoDto } from "@/dtos/video-dto";
-import { BookOpen, Calendar, Edit, FileText, Video } from "lucide-react";
+import { BookOpen, Calendar, Edit, FileText, Trash2, Video } from "lucide-react";
 import { Button } from "./ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "./ui/card";
 import { TabsContent } from "./ui/tabs";
 import { useState } from "react";
 import { DialogEditMaterial } from "./dialog-edit-material";
 import { Badge } from "./ui/badge";
+import { DialogDeleteMaterial } from "./dialog-delete-material";
 
 type Material = BookDto | ArticleDto | VideoDto;
 
@@ -30,16 +31,25 @@ function getKey(material: Material): string {
 }
 
 function formatDate(date: string) {
+  console.log(date);
+
   return new Date(date).toLocaleDateString("pt-BR");
 }
 
 export function TabContentComponent({ materialList, value }: Props) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Material | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
+  const [deletingItem, setDeletingItem] = useState<Material | null>(null);
 
   const handleEditContent = (item: Material) => {
     setEditingItem(item);
     setIsEditDialogOpen(true);
+  };
+
+  const handleDeleteContent = (item: Material) => {
+    setDeletingItem({ ...item });
+    setIsDeleteDialogOpen(true);
   };
 
   return (
@@ -50,6 +60,13 @@ export function TabContentComponent({ materialList, value }: Props) {
         editingItem={editingItem}
         setEditingItem={setEditingItem}
       />
+      <DialogDeleteMaterial
+        isDeleteDialogOpen={isDeleteDialogOpen}
+        setIsDeleteDialogOpen={setIsDeleteDialogOpen}
+        deletingItem={deletingItem}
+        setDeletingItem={setDeletingItem}
+      />
+
       <TabsContent value={value} className="mt-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {materialList.map((material) => (
@@ -77,15 +94,27 @@ export function TabContentComponent({ materialList, value }: Props) {
                     <Calendar className="w-3 h-3 mr-1" />
                     {formatDate(material.material.publicationDate)}
                   </div>
-                  <Button
-                    onClick={() => handleEditContent(material)}
-                    size="sm"
-                    variant="outline"
-                    className="text-amber-600 border-amber-300 hover:bg-amber-50"
-                  >
-                    <Edit className="w-3 h-3 mr-1" />
-                    Editar
-                  </Button>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      onClick={() => handleEditContent(material)}
+                      size="sm"
+                      variant="outline"
+                      className="text-amber-600 border-amber-300 hover:bg-amber-50"
+                    >
+                      <Edit className="w-3 h-3 mr-1" />
+                      Editar
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleDeleteContent(material)}
+                      className="text-red-600 border-red-300 hover:bg-red-50"
+                    >
+                      <Trash2 className="w-3 h-3 mr-1" />
+                      Excluir
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

@@ -3,12 +3,22 @@ import { Form, FormField, FormItem } from "./ui/form";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Mail, User, Eye, EyeOff, Book } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 export function RegisterComponent() {
   const form = useForm();
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      router.push("/dashboard");
+    }
+  }, [router]);
 
   return (
     <Form {...form}>

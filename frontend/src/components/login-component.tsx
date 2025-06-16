@@ -1,24 +1,55 @@
+"use client";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem } from "./ui/form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BookOpen, Eye, EyeOff } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { AuthDto } from "@/dtos/auth-dto";
+import { auth } from "@/graphql/user/mutations/auth";
+import { useRouter } from "next/navigation";
 
 interface Props {
   setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export function LoginComponent({ setIsLogin }: Props) {
-  const form = useForm();
+  const form = useForm<AuthDto>({
+    defaultValues: {
+      mail: "",
+      password: "",
+    },
+  });
+
+  const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      router.push("/dashboard");
+    }
+  }, [router]);
+
+  const onSubmit = async (data: AuthDto) => {
+    const response = await auth(data);
+    const token = response?.data?.loginUser?.token;
+
+    if (token) {
+      localStorage.setItem("token", token);
+      router.push("/dashboard");
+    } else {
+      console.error("Token não recebido");
+    }
+  };
+
   return (
     <Form {...form}>
-      <form className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="email"
+          name="mail"
           render={({ field }) => (
             <FormItem>
               <Input

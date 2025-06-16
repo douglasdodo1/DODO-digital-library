@@ -1,6 +1,6 @@
-export interface CreateBookInput {
-  isbn: string;
-  pageNumbers: number;
+export interface CreateVideoInput {
+  doi: string;
+  language: string;
   title: string;
   category: string;
   description?: string;

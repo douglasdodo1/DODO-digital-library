@@ -1,4 +1,4 @@
-import { ALL_ARTICLES } from "@/graphql/article/all-articles-query";
+import { ALL_ARTICLES } from "@/graphql/article/query/all-articles-query";
 import axios from "axios";
 
 export const getAllArticles = async () => {
