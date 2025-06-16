@@ -16,5 +16,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>;
+  return <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</div>;
 }

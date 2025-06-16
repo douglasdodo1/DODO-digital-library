@@ -1,11 +1,11 @@
-import { ALL_BOOKS } from "@/graphql/book/all-books-query";
+import { ALL_VIDEOS } from "@/graphql/video/query/get-all-videos-query";
 import axios from "axios";
 
-export const getAllBooks = async () => {
+export const getAllVideos = async () => {
   const response = await axios.post(
     "http://localhost:3000/graphql",
     {
-      query: ALL_BOOKS,
+      query: ALL_VIDEOS,
     },
     {
       headers: {
@@ -14,5 +14,5 @@ export const getAllBooks = async () => {
       },
     }
   );
-  return response.data.data?.allBooks || [];
+  return response.data.data?.allVideos || [];
 };

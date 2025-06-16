@@ -1,8 +1,14 @@
 import { Library, Search, User, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { useRouter } from "next/navigation";
 
 export function Header() {
+  const router = useRouter();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/");
+  };
   return (
     <header className="bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg">
       <div className="w-full px-8 py-4">
@@ -28,7 +34,7 @@ export function Header() {
               <User className="w-5 h-5" />
             </Button>
 
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/20">
+            <Button onClick={handleLogout} variant="ghost" size="icon" className="text-white hover:bg-white/20">
               <LogOut className="w-5 h-5" />
             </Button>
           </div>
