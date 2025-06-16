@@ -12,8 +12,9 @@ export const CREATE_VIDEO = `
                     author {
                         name
                     }
+                    publicationDate
                 }
-                publicationDate
+                
             }
             errors
         }
