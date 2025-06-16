@@ -1,11 +1,12 @@
 export interface CreateArticleInput {
   doi: string;
-  publicationDate: number;
+  publicationDate: string;
   language: string;
   title: string;
   description?: string;
   status: string;
   authorName: string;
   authorType: string;
-  personDateOfBirth: string;
+  personDateOfBirth?: string;
+  institutionCity?: string;
 }
