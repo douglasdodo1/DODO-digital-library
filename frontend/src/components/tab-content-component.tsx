@@ -27,7 +27,6 @@ function getKey(material: Material): string {
   } else if ("id" in material) {
     return material.id.toString();
   }
-  // fallback improvável, mas caso não tenha nenhuma propriedade esperada:
   return Math.random().toString();
 }
 
@@ -48,14 +47,12 @@ export function TabContentComponent({ materialList, value }: Props) {
   };
 
   const handleDeleteContent = (item: Material) => {
-    // clonamos o objeto para evitar mutações indesejadas
     setDeletingItem({ ...item });
     setIsDeleteDialogOpen(true);
   };
 
   return (
     <div>
-      {/* Diálogos de edição e exclusão */}
       <DialogEditMaterial
         isEditDialogOpen={isEditDialogOpen}
         setIsEditDialogOpen={setIsEditDialogOpen}
@@ -70,12 +67,10 @@ export function TabContentComponent({ materialList, value }: Props) {
       />
 
       <TabsContent value={value} className="mt-6">
-        {/* Container de grid: items-stretch para esticar cards verticalmente */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
           {materialList.map((material) => (
             <Card
               key={getKey(material)}
-              // flex em coluna + h-full para ocupar toda altura da célula do grid
               className="flex flex-col h-full hover:shadow-lg transition-shadow border-amber-200"
             >
               <CardHeader>
