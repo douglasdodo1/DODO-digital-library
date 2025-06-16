@@ -1,6 +1,6 @@
 import axios from "axios";
 import { CREATE_ARTICLE } from "../query/create-article-query";
-import { CreateArticleInput } from "@/dtos/create-article-input";
+import { CreateArticleInput } from "@/app/inputs/create-article-input";
 
 export async function createArticle(input: CreateArticleInput) {
   try {

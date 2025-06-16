@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CreateBookInput } from "@/dtos/create-book-input";
+import { CreateBookInput } from "@/app/inputs/create-book-input";
 import { CREATE_BOOK } from "@/graphql/book/query/create-book-query";
 
 export async function createBook(input: CreateBookInput) {
