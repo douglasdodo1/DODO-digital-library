@@ -7,26 +7,25 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createBookSchema } from "../schemas/create-book-schema";
-import { createBook } from "@/graphql/book/mutations/create-book";
-import { BookDto } from "@/dtos/book-dto";
-import { getAllBooks } from "@/graphql/book/mutations/get-all-books";
+import { createArticleSchema } from "../schemas/create-article-schema";
+import { createArticle } from "@/graphql/article/mutations/create-article";
+import { ArticleDto } from "@/dtos/article-dto";
 
-type CreateBookFormData = z.infer<typeof createBookSchema>;
+type CreateArticleFormData = z.infer<typeof createArticleSchema>;
 
 interface BookFormProps {
   onSuccess?: () => void;
-  setBookList: React.Dispatch<React.SetStateAction<BookDto[]>>;
+  setArticleList: React.Dispatch<React.SetStateAction<ArticleDto[]>>;
 }
 
-export function BookForm({ onSuccess, setBookList }: BookFormProps) {
-  const form = useForm<CreateBookFormData>({
-    resolver: zodResolver(createBookSchema),
+export function ArticleForm({ onSuccess }: BookFormProps) {
+  const form = useForm<CreateArticleFormData>({
+    resolver: zodResolver(createArticleSchema),
     defaultValues: {
-      isbn: "",
+      doi: "",
       title: "",
       authorName: "",
-      pageNumbers: 0,
+      language: "",
       category: "",
       description: "",
       publicationDate: "",
@@ -42,16 +41,16 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
     name: "authorType",
   });
 
-  const onSubmit = async (data: CreateBookFormData) => {
+  const onSubmit = async (data: CreateArticleFormData) => {
     data = {
       ...data,
       personDateOfBirth: data.authorType === "person" ? data.personDateOfBirth : undefined,
       institutionCity: data.authorType === "institution" ? data.institutionCity : undefined,
     };
+    console.log(data);
 
-    await createBook(data);
-    const books = await getAllBooks();
-    setBookList(books);
+    const Response = await createArticle(data);
+    console.log(Response);
     onSuccess?.();
   };
 
@@ -62,12 +61,12 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
           <div className="flex gap-6">
             <FormField
               control={form.control}
-              name="isbn"
+              name="doi"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>ISBN</FormLabel>
+                  <FormLabel>DOI</FormLabel>
                   <FormControl>
-                    <Input placeholder="978-3-16-148410-0" {...field} />
+                    <Input placeholder="Ex: 9783161484100" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -80,7 +79,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Título</FormLabel>
                   <FormControl>
-                    <Input placeholder="Título do livro" {...field} />
+                    <Input placeholder="Ex: O Senhor dos Anéis" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -96,7 +95,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Autor</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nome do autor" {...field} />
+                    <Input placeholder="Ex: J. R. R. Tolkien" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -111,7 +110,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecione o tipo" />
+                        <SelectValue placeholder="Selecione o tipo de autor" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -126,56 +125,46 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
           </div>
 
           {authorType === "person" && (
-            <div className="flex gap-6">
-              <FormField
-                control={form.control}
-                name="personDateOfBirth"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Data de Nascimento</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="personDateOfBirth"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Data de Nascimento</FormLabel>
+                  <FormControl>
+                    <Input type="date" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           )}
 
           {authorType === "institution" && (
-            <div className="flex gap-6">
-              <FormField
-                control={form.control}
-                name="institutionCity"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Cidade da Instituição</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Ex: São Paulo" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="institutionCity"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Cidade da Instituição</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ex: São Paulo" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           )}
 
           <div className="flex gap-6">
             <FormField
               control={form.control}
-              name="pageNumbers"
+              name="language"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Número de Páginas</FormLabel>
+                  <FormLabel>Idioma</FormLabel>
                   <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Ex: 300"
-                      {...field}
-                      onChange={(e) => field.onChange(Number(e.target.value))}
-                      value={field.value ?? ""}
-                    />
+                    <Input type="text" placeholder="en" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -188,7 +177,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Categoria</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Romance, Ciência" {...field} />
+                    <Input placeholder="Ex: Ficção, Autoajuda" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -196,29 +185,30 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
             />
           </div>
 
-          <div className="flex gap-6">
-            <FormField
-              control={form.control}
-              name="publicationDate"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>Data de Publicação</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+          <FormField
+            control={form.control}
+            name="publicationDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Data de Publicação</FormLabel>
+                <FormControl>
+                  <Input type="date" placeholder="Selecione a data" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="w-1/2 mx-auto">
             <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>Status</FormLabel>
+                <FormItem className="flex flex-col items-center gap-2">
+                  <FormLabel className="text-center">Status</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full h-12 items-center justify-center">
                         <SelectValue placeholder="Selecione o status" />
                       </SelectTrigger>
                     </FormControl>
@@ -241,7 +231,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
               <FormItem>
                 <FormLabel>Descrição</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Descrição do livro" {...field} />
+                  <Textarea placeholder="Resumo ou sinopse do livro" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -256,7 +246,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
               className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700"
               type="submit"
             >
-              Cadastrar Livro
+              Cadastrar artigo
             </Button>
           </div>
         </form>

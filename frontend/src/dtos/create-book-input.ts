@@ -7,6 +7,7 @@ export interface CreateBookInput {
   status: string;
   authorName: string;
   authorType: string;
-  personDateOfBirth: string;
+  personDateOfBirth?: string;
+  institutionCity?: string;
   publicationDate: string;
 }
