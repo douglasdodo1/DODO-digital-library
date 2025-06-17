@@ -10,12 +10,15 @@ import { useRouter } from "next/navigation";
 import { createUserSchema } from "./schemas/create-user-schema";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { createUser } from "@/graphql/user/mutations/create-user";
 
 interface RegisterComponentProps {
   onSuccess?: () => void;
 }
 
 export function RegisterComponent({ onSuccess }: RegisterComponentProps) {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const router = useRouter();
   type CreateUserFormData = z.infer<typeof createUserSchema>;
 
   const form = useForm<CreateUserFormData>({
@@ -23,14 +26,11 @@ export function RegisterComponent({ onSuccess }: RegisterComponentProps) {
     defaultValues: {
       cpf: "",
       name: "",
-      email: "",
+      mail: "",
       password: "",
       confirmPassword: "",
     },
   });
-
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -39,22 +39,24 @@ export function RegisterComponent({ onSuccess }: RegisterComponentProps) {
     }
   }, [router]);
 
-  const handleRegister = form.handleSubmit(async (data) => {
-    try {
-      console.log("Dados para cadastro:", data);
-      if (onSuccess) {
-        onSuccess();
-      } else {
-        router.push("/login");
-      }
-    } catch (error) {
-      console.error("Erro no cadastro:", error);
-    }
-  });
+  const onSubmit = async (data: CreateUserFormData) => {
+    const input = {
+      cpf: data.cpf,
+      name: data.name,
+      mail: data.mail,
+      password: data.password,
+    };
+
+    console.log(input);
+
+    const response = await createUser(input);
+    console.log(response);
+    onSuccess?.();
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={handleRegister} className="space-y-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
         <div className="flex flex-row flex-wrap gap-x-6 items-start">
           <FormField
             control={form.control}
@@ -91,7 +93,7 @@ export function RegisterComponent({ onSuccess }: RegisterComponentProps) {
         </div>
         <FormField
           control={form.control}
-          name="email"
+          name="mail"
           render={({ field }) => (
             <FormItem>
               <FormLabel>E-mail</FormLabel>

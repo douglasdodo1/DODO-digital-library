@@ -12,7 +12,7 @@ export const createUserSchema = z
       .min(3, "deve conter pelo menos 3 caracteres")
       .max(100, "deve conter até 100 caracteres")
       .regex(/^[a-zA-Z\s]+$/, "Nome deve conter apenas letras e espaços"),
-    email: z.string().email("E-mail inválido"),
+    mail: z.string().email("E-mail inválido"),
     password: z.string().min(1, "Senha é obrigatória").min(6, "Senha deve conter pelo menos 6 caracteres"),
     confirmPassword: z
       .string()
