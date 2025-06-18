@@ -17,6 +17,9 @@ type Material = BookDto | ArticleDto | VideoDto;
 interface Props {
   materialList: Material[];
   value: string;
+  setBookList: React.Dispatch<React.SetStateAction<BookDto[]>>;
+  setArticleList: React.Dispatch<React.SetStateAction<ArticleDto[]>>;
+  setVideoList: React.Dispatch<React.SetStateAction<VideoDto[]>>;
 }
 
 function getKey(material: Material): string {
@@ -31,11 +34,10 @@ function getKey(material: Material): string {
 }
 
 function formatDate(date: string) {
-  // Ajusta para o formato brasileiro
   return new Date(date).toLocaleDateString("pt-BR");
 }
 
-export function TabContentComponent({ materialList, value }: Props) {
+export function TabContentComponent({ materialList, value, setBookList, setArticleList, setVideoList }: Props) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Material | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState<boolean>(false);
@@ -58,6 +60,9 @@ export function TabContentComponent({ materialList, value }: Props) {
         setIsEditDialogOpen={setIsEditDialogOpen}
         editingItem={editingItem}
         setEditingItem={setEditingItem}
+        setBookList={setBookList}
+        setArticleList={setArticleList}
+        setVideoList={setVideoList}
       />
       <DialogDeleteMaterial
         isDeleteDialogOpen={isDeleteDialogOpen}

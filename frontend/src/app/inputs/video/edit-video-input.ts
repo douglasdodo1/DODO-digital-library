@@ -1,6 +1,4 @@
-export interface CreateBookInput {
-  isbn: string;
-  pageNumbers: number;
+export interface EditVideoInput {
   title: string;
   category: string;
   description?: string;
@@ -10,4 +8,5 @@ export interface CreateBookInput {
   personDateOfBirth?: string;
   institutionCity?: string;
   publicationDate: string;
+  durationMinutes: number;
 }

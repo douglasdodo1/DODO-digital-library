@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { materialCommonSchema } from "./material-common-schema";
+import { materialCommonSchema } from "../material-common-schema";
 
 export const createBookSchema = materialCommonSchema.extend({
   isbn: z

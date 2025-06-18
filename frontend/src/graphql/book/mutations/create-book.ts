@@ -1,8 +1,8 @@
 import axios from "axios";
-import { CreateBookInput } from "@/app/inputs/create-book-input";
+import { bookInput } from "@/app/inputs/book/book-input";
 import { CREATE_BOOK } from "@/graphql/book/query/create-book-query";
 
-export async function createBook(input: CreateBookInput) {
+export async function createBook(input: bookInput) {
   try {
     const response = await axios.post(
       "http://localhost:3000/graphql",
