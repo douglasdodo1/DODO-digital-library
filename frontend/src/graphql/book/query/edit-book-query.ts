@@ -12,6 +12,12 @@ export const EDIT_BOOK = `
                 publicationDate
                 author {
                     name
+                    person {
+                        birthDate
+                    }
+                    institution {
+                        city
+                    }
                 }
             }
         }
