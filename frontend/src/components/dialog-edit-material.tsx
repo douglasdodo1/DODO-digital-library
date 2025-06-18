@@ -53,7 +53,11 @@ export function DialogEditMaterial({
           <DialogTitle>Editar {getTypeLabel(editingItem)}</DialogTitle>
           <DialogDescription>Atualize as informações do item selecionado.</DialogDescription>
         </DialogHeader>
-        <EditBookForm setBookList={setBookList} editingBook={editingItem as BookDto} />
+        <EditBookForm
+          setBookList={setBookList}
+          editingBook={editingItem as BookDto}
+          setIsEditDialogOpen={setIsEditDialogOpen}
+        />
       </DialogContent>
     </Dialog>
   );

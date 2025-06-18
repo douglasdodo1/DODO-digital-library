@@ -1,12 +1,22 @@
-# frozen_string_literal: true
-
 module Types
   class QueryType < Types::BaseObject
+    # Usuário
     field :user_by_cpf, Types::User::UserType, null: true do
       description "Retorna um usuário dado o CPF"
       argument :cpf, String, required: true
     end
 
+    # Autor
+    field :author_by_id, Types::Author::AuthorType, null: true do
+      description "Retorna um autor dado o ID"
+      argument :id, ID, required: true
+    end
+
+    field :all_authors, [Types::Author::AuthorType], null: true do
+      description "Retorna todos os autores"
+    end
+
+    # Pessoa e Instituição (ligados a Author)
     field :person_by_id, Types::Person::PersonType, null: true do
       description "Retorna uma pessoa dado o ID"
       argument :id, ID, required: true
@@ -17,6 +27,7 @@ module Types
       argument :id, ID, required: true
     end
 
+    # Livros
     field :book_by_isbn, Types::Book::BookType, null: true do
       description "Retorna um livro dado o ISBN"
       argument :isbn, String, required: true
@@ -25,24 +36,25 @@ module Types
       description "Retorna todos os livros"
     end
 
+    # Vídeos
     field :video_by_id, Types::Video::VideoType, null: true do
-      description "Retorna um video dado o ID"
+      description "Retorna um vídeo dado o ID"
       argument :id, ID, required: true
     end
-
     field :all_videos, [Types::Video::VideoType], null: true do
-      description "Retorna todos os videos"
+      description "Retorna todos os vídeos"
     end
 
+    # Artigos
     field :article_by_doi, Types::Article::ArticleType, null: true do
       description "Retorna um artigo dado o DOI"
       argument :doi, String, required: true
     end
-
     field :all_articles, [Types::Article::ArticleType], null: true do
       description "Retorna todos os artigos"
     end
 
+    # Busca genérica com paginação (Relay style)
     field :search_materials, Types::Material::MaterialType.connection_type, null: false do
       description "Busca materiais por título, autor ou descrição, com paginação"
       argument :query, String, required: true
@@ -50,17 +62,18 @@ module Types
       argument :per_page, Integer, required: false, default_value: 10
     end
 
-    def search_materials(query:, page:, per_page:)
-      materials = ::Material.joins(:author)
-        .where("materials.title ILIKE :q OR authors.name ILIKE :q OR materials.description ILIKE :q", q: "%#{query}%")
-        .distinct
-        .page(page)
-        .per(per_page)
-      materials
-    end
+    # --- Resolver methods ---
 
     def user_by_cpf(cpf:)
       ::User.find_by(cpf: cpf)
+    end
+
+    def author_by_id(id:)
+      ::Author.includes(:person, :institution).find_by(id: id)
+    end
+
+    def all_authors
+      ::Author.includes(:person, :institution).all
     end
 
     def person_by_id(id:)
@@ -71,29 +84,37 @@ module Types
       ::Institution.includes(:author).find_by(id: id)
     end
 
+    def book_by_isbn(isbn:)
+      ::Book.find_by(isbn: isbn)
+    end
+
+    def all_books
+      ::Book.includes(material: :author).all
+    end
+
     def video_by_id(id:)
       ::Video.includes(material: :author).find_by(id: id)
     end
 
-    def all_videos()
-      ::Video.includes(material: :author)
+    def all_videos
+      ::Video.includes(material: :author).all
     end
 
     def article_by_doi(doi:)
       ::Article.find_by(doi: doi)
     end
 
-    def all_articles()
-      ::Article.includes(material: :author)
+    def all_articles
+      ::Article.includes(material: :author).all
     end
 
-    def book_by_isbn(isbn:)
-      ::Book.find_by(isbn: isbn)
+    def search_materials(query:, page:, per_page:)
+      ::Material
+        .joins(:author)
+        .where("materials.title ILIKE :q OR authors.name ILIKE :q OR materials.description ILIKE :q", q: "%#{query}%")
+        .distinct
+        .page(page)
+        .per(per_page)
     end
-
-    def all_books()
-      ::Book.includes(material: :author)
-    end
-
   end
 end

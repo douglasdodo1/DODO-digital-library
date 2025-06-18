@@ -43,6 +43,23 @@ module Mutations
           publication_date: input[:publicationDate] || material.publication_date
         )
 
+        if input[:authorType]
+          author = material.author
+
+          case input[:authorType]
+            when "person"
+              author.person.update!(
+                birth_date: input[:personDateOfBirth] || author.person.birth_date
+              )
+
+            when "institution"
+              author.institution.update!(
+                city: input[:institutionCity] || author.institution.city
+              )
+          end
+        end
+
+
         book.update!(
           page_numbers: input[:page_numbers] || book.page_numbers
         )

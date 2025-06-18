@@ -18,24 +18,25 @@ interface BookFormProps {
   onSuccess?: () => void;
   setBookList: React.Dispatch<React.SetStateAction<BookDto[]>>;
   editingBook: BookDto;
+  setIsEditDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem }: BookFormProps) {
+export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDialogOpen }: BookFormProps) {
   const form = useForm<updateBookFormData>({
     resolver: zodResolver(updateBookSchema),
     defaultValues: {
-      isbn: editingItem.isbn,
-      title: editingItem.material.title,
-      authorName: editingItem.material.author.name,
-      pageNumbers: editingItem.pageNumbers,
-      category: editingItem.material.category,
-      description: editingItem.material.description,
-      publicationDate: editingItem.material.publicationDate,
-      status: (["publicado", "enviado", "rascunho"].includes(editingItem.material.status)
-        ? editingItem.material.status
+      isbn: editingBook.isbn,
+      title: editingBook.material.title,
+      authorName: editingBook.material.author.name,
+      pageNumbers: editingBook.pageNumbers,
+      category: editingBook.material.category,
+      description: editingBook.material.description,
+      publicationDate: editingBook.material.publicationDate,
+      status: (["publicado", "enviado", "rascunho"].includes(editingBook.material.status)
+        ? editingBook.material.status
         : "rascunho") as "publicado" | "enviado" | "rascunho",
       authorType: "person",
-      personDateOfBirth: "2024-06-01",
+      personDateOfBirth: editingBook.material.author.person?.birthDate,
       institutionCity: "",
     },
   });
@@ -52,6 +53,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem 
       institutionCity: data.authorType === "institution" ? data.institutionCity : undefined,
     };
 
+    console.log(data);
     Response = await editBook(data);
     console.log(Response);
     const books = await getAllBooks();
@@ -71,7 +73,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem 
                 <FormItem className="flex-1">
                   <FormLabel>ISBN</FormLabel>
                   <FormControl>
-                    <Input placeholder={editingItem.isbn} {...field} />
+                    <Input placeholder={editingBook.isbn} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -84,7 +86,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem 
                 <FormItem className="flex-1">
                   <FormLabel>Título</FormLabel>
                   <FormControl>
-                    <Input placeholder={editingItem.material.title} {...field} />
+                    <Input placeholder={editingBook.material.title} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -100,7 +102,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem 
                 <FormItem className="flex-1">
                   <FormLabel>Autor</FormLabel>
                   <FormControl>
-                    <Input placeholder={editingItem.material.author.name} {...field} />
+                    <Input placeholder={editingBook.material.author.name} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -138,7 +140,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem 
                   <FormItem className="flex-1">
                     <FormLabel>Data de Nascimento</FormLabel>
                     <FormControl>
-                      <Input type="date" placeholder="Ex: 01/01/2000" {...field} />
+                      <Input type="date" placeholder={editingBook.material.author.person?.birthDate} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -156,7 +158,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem 
                   <FormItem className="flex-1">
                     <FormLabel>Cidade da Instituição</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex: São Paulo" {...field} />
+                      <Input placeholder={editingBook.material.author.institution?.city} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -175,7 +177,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem 
                   <FormControl>
                     <Input
                       type="number"
-                      placeholder={editingItem.pageNumbers.toString()}
+                      placeholder={editingBook.pageNumbers.toString()}
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                       value={field.value ?? ""}
@@ -192,7 +194,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem 
                 <FormItem className="flex-1">
                   <FormLabel>Categoria</FormLabel>
                   <FormControl>
-                    <Input placeholder={editingItem.material.category} {...field} />
+                    <Input placeholder={editingBook.material.category} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -208,7 +210,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem 
                 <FormItem className="flex-1">
                   <FormLabel>Data de Publicação</FormLabel>
                   <FormControl>
-                    <Input type="date" placeholder={editingItem.material.publicationDate} {...field} />
+                    <Input type="date" placeholder={editingBook.material.publicationDate} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -223,7 +225,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem 
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder={editingItem.material.status} />
+                        <SelectValue placeholder={editingBook.material.status} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -253,7 +255,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem 
           />
 
           <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline" onClick={() => onSuccess?.()}>
+            <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancelar
             </Button>
             <Button

@@ -10,6 +10,12 @@ export const ALL_BOOKS = `
         status
         author {
           name
+          person {
+              birthDate
+          }
+          institution {
+              city
+          }
         }
         publicationDate
       }
