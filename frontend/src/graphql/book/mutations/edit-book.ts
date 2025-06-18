@@ -1,13 +1,13 @@
 import axios from "axios";
-import { CREATE_ARTICLE } from "../query/create-article-query";
-import { CreateArticleInput } from "@/app/inputs/article/create-article-input";
+import { bookInput } from "@/app/inputs/book/book-input";
+import { EDIT_BOOK } from "../query/edit-book-query";
 
-export async function createArticle(input: CreateArticleInput) {
+export async function editBook(input: Partial<bookInput>) {
   try {
     const response = await axios.post(
       "http://localhost:3000/graphql",
       {
-        query: CREATE_ARTICLE,
+        query: EDIT_BOOK,
         variables: { input },
       },
       {
@@ -20,7 +20,7 @@ export async function createArticle(input: CreateArticleInput) {
     console.log(`resposta: ${response.data}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao criar artigo:", error);
+    console.error("Erro ao editar livro:", error);
     throw error;
   }
 }

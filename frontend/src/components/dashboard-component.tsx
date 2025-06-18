@@ -42,10 +42,6 @@ export default function DashboardComponent() {
     fetchVideos();
   }, []);
 
-  function handleEditContent(): void {
-    setIsCreateDialogOpen(true);
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
       <Header />
@@ -101,9 +97,9 @@ export default function DashboardComponent() {
                 </TabsTrigger>
               </TabsList>
 
-              <TabContentComponent materialList={bookList} value="livros" />
-              <TabContentComponent materialList={articleList} value="artigos" />
-              <TabContentComponent materialList={videoList} value="videos" />
+              <TabContentComponent materialList={bookList} setBookList={setBookList} setArticleList={setArticleList} setVideoList={setVideoList} value="livros" />
+              <TabContentComponent materialList={articleList} setBookList={setBookList} setArticleList={setArticleList} setVideoList={setVideoList} value="artigos" />
+              <TabContentComponent materialList={videoList}  setBookList={setBookList} setArticleList={setArticleList} setVideoList={setVideoList} value="videos" />
             </Tabs>
           </div>
         </div>

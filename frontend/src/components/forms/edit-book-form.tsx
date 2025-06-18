@@ -1,4 +1,3 @@
-// create-book-form.tsx
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
@@ -7,31 +6,36 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createArticleSchema } from "../schemas/article/create-article-schema";
-import { createArticle } from "@/graphql/article/mutations/create-article";
-import { ArticleDto } from "@/dtos/article-dto";
+import { BookDto } from "@/dtos/book-dto";
+import { getAllBooks } from "@/graphql/book/mutations/get-all-books";
+import { createBookSchema } from "../schemas/book/create-book-schema";
+import { editBook } from "@/graphql/book/mutations/edit-book";
 
-type CreateArticleFormData = z.infer<typeof createArticleSchema>;
+const updateBookSchema = createBookSchema.partial();
+type updateBookFormData = z.infer<typeof updateBookSchema>;
 
 interface BookFormProps {
   onSuccess?: () => void;
-  setArticleList: React.Dispatch<React.SetStateAction<ArticleDto[]>>;
+  setBookList: React.Dispatch<React.SetStateAction<BookDto[]>>;
+  editingBook: BookDto;
 }
 
-export function ArticleForm({ onSuccess }: BookFormProps) {
-  const form = useForm<CreateArticleFormData>({
-    resolver: zodResolver(createArticleSchema),
+export function EditBookForm({ onSuccess, setBookList, editingBook: editingItem }: BookFormProps) {
+  const form = useForm<updateBookFormData>({
+    resolver: zodResolver(updateBookSchema),
     defaultValues: {
-      doi: "",
-      title: "",
-      authorName: "",
-      language: "",
-      category: "",
-      description: "",
-      publicationDate: "",
-      status: "rascunho",
+      isbn: editingItem.isbn,
+      title: editingItem.material.title,
+      authorName: editingItem.material.author.name,
+      pageNumbers: editingItem.pageNumbers,
+      category: editingItem.material.category,
+      description: editingItem.material.description,
+      publicationDate: editingItem.material.publicationDate,
+      status: (["publicado", "enviado", "rascunho"].includes(editingItem.material.status)
+        ? editingItem.material.status
+        : "rascunho") as "publicado" | "enviado" | "rascunho",
       authorType: "person",
-      personDateOfBirth: "",
+      personDateOfBirth: "2024-06-01",
       institutionCity: "",
     },
   });
@@ -41,16 +45,17 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
     name: "authorType",
   });
 
-  const onSubmit = async (data: CreateArticleFormData) => {
+  const onSubmit = async (data: updateBookFormData) => {
     data = {
       ...data,
       personDateOfBirth: data.authorType === "person" ? data.personDateOfBirth : undefined,
       institutionCity: data.authorType === "institution" ? data.institutionCity : undefined,
     };
-    console.log(data);
 
-    const Response = await createArticle(data);
+    Response = await editBook(data);
     console.log(Response);
+    const books = await getAllBooks();
+    setBookList(books);
     onSuccess?.();
   };
 
@@ -61,12 +66,12 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
           <div className="flex gap-6">
             <FormField
               control={form.control}
-              name="doi"
+              name="isbn"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>DOI</FormLabel>
+                  <FormLabel>ISBN</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: 9783161484100" {...field} />
+                    <Input placeholder={editingItem.isbn} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -79,7 +84,7 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Título</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: O Senhor dos Anéis" {...field} />
+                    <Input placeholder={editingItem.material.title} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -95,7 +100,7 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Autor</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: J. R. R. Tolkien" {...field} />
+                    <Input placeholder={editingItem.material.author.name} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -110,7 +115,7 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecione o tipo de autor" />
+                        <SelectValue placeholder="Selecione o tipo do autor" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -125,46 +130,56 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
           </div>
 
           {authorType === "person" && (
-            <FormField
-              control={form.control}
-              name="personDateOfBirth"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Data de Nascimento</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex gap-6">
+              <FormField
+                control={form.control}
+                name="personDateOfBirth"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Data de Nascimento</FormLabel>
+                    <FormControl>
+                      <Input type="date" placeholder="Ex: 01/01/2000" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           )}
 
           {authorType === "institution" && (
-            <FormField
-              control={form.control}
-              name="institutionCity"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Cidade da Instituição</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: São Paulo" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex gap-6">
+              <FormField
+                control={form.control}
+                name="institutionCity"
+                render={({ field }) => (
+                  <FormItem className="flex-1">
+                    <FormLabel>Cidade da Instituição</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Ex: São Paulo" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
           )}
 
           <div className="flex gap-6">
             <FormField
               control={form.control}
-              name="language"
+              name="pageNumbers"
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Idioma</FormLabel>
+                  <FormLabel>Número de Páginas</FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="en" {...field} />
+                    <Input
+                      type="number"
+                      placeholder={editingItem.pageNumbers.toString()}
+                      {...field}
+                      onChange={(e) => field.onChange(Number(e.target.value))}
+                      value={field.value ?? ""}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -177,7 +192,7 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Categoria</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Ficção, Autoajuda" {...field} />
+                    <Input placeholder={editingItem.material.category} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -185,31 +200,30 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
             />
           </div>
 
-          <FormField
-            control={form.control}
-            name="publicationDate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Data de Publicação</FormLabel>
-                <FormControl>
-                  <Input type="date" placeholder="Selecione a data" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="w-1/2 mx-auto">
+          <div className="flex gap-6">
+            <FormField
+              control={form.control}
+              name="publicationDate"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Data de Publicação</FormLabel>
+                  <FormControl>
+                    <Input type="date" placeholder={editingItem.material.publicationDate} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="status"
               render={({ field }) => (
-                <FormItem className="flex flex-col items-center gap-2">
-                  <FormLabel className="text-center">Status</FormLabel>
+                <FormItem className="flex-1">
+                  <FormLabel>Status</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="w-full h-12 items-center justify-center">
-                        <SelectValue placeholder="Selecione o status" />
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder={editingItem.material.status} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -231,7 +245,7 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
               <FormItem>
                 <FormLabel>Descrição</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Resumo ou sinopse do livro" {...field} />
+                  <Textarea placeholder="Descrição do livro" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -246,7 +260,7 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
               className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700"
               type="submit"
             >
-              Cadastrar artigo
+              Editar Livro
             </Button>
           </div>
         </form>

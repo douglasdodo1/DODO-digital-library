@@ -9,8 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { createVideo } from "@/graphql/video/mutations/create-video";
 import { getAllVideos } from "@/graphql/video/mutations/get-all-videos";
-import { createVideoSchema } from "../schemas/create-video-schema";
 import { VideoDto } from "@/dtos/video-dto";
+import { createVideoSchema } from "../schemas/video/create-video-schema";
 
 type CreateVideoFormData = z.infer<typeof createVideoSchema>;
 
