@@ -70,6 +70,14 @@ export function DialogEditMaterial({
             setIsEditDialogOpen={setIsEditDialogOpen}
           />
         )}
+
+        {getType(editingItem) === "video" && (
+          <EditVideoForm
+            setVideoList={setVideoList}
+            editingVideo={editingItem as VideoDto}
+            setIsEditDialogOpen={setIsEditDialogOpen}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

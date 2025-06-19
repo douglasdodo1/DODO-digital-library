@@ -1,4 +1,4 @@
-import { ALL_VIDEOS } from "@/graphql/video/query/get-all-videos-query";
+import { ALL_VIDEOS } from "@/graphql/video/query/all-videos-query";
 import axios from "axios";
 
 export const getAllVideos = async () => {

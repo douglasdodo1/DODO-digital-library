@@ -1,4 +1,4 @@
-export interface CreateVideoInput {
+export interface videoInput {
   title: string;
   category: string;
   description?: string;
