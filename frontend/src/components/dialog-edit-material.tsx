@@ -2,8 +2,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogOverlay, 
 import { BookDto } from "@/dtos/book-dto";
 import { ArticleDto } from "@/dtos/article-dto";
 import { VideoDto } from "@/dtos/video-dto";
-import { EditBookForm } from "./forms/edit-book-form";
+import { EditBookForm } from "./forms/book/edit-book-form";
 import { MaterialDto } from "@/dtos/material-dto";
+import { EditArticleForm } from "./forms/article/edit-article-form";
+import { EditVideoForm } from "./forms/video/edit-video-form";
 
 type Material = BookDto | ArticleDto | VideoDto;
 
@@ -34,7 +36,7 @@ export function DialogEditMaterial({
 
   if (!editingItem) return null;
 
-  function getType(material: MaterialDto): string {
+  function getType(material: Material): string {
     if ("isbn" in material) {
       return "book";
     } else if ("doi" in material) {
@@ -53,11 +55,13 @@ export function DialogEditMaterial({
           <DialogTitle>Editar {getTypeLabel(editingItem)}</DialogTitle>
           <DialogDescription>Atualize as informações do item selecionado.</DialogDescription>
         </DialogHeader>
-        <EditBookForm
-          setBookList={setBookList}
-          editingBook={editingItem as BookDto}
-          setIsEditDialogOpen={setIsEditDialogOpen}
-        />
+        {getType(editingItem) === "book" && (
+          <EditBookForm
+            setBookList={setBookList}
+            editingBook={editingItem as BookDto}
+            setIsEditDialogOpen={setIsEditDialogOpen}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

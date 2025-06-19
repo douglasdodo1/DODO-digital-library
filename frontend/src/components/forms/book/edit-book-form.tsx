@@ -6,33 +6,37 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createBook } from "@/graphql/book/mutations/create-book";
 import { BookDto } from "@/dtos/book-dto";
 import { getAllBooks } from "@/graphql/book/mutations/get-all-books";
-import { createBookSchema } from "../schemas/book/create-book-schema";
+import { createBookSchema } from "../../schemas/book/create-book-schema";
+import { editBook } from "@/graphql/book/mutations/edit-book";
 
-type CreateBookFormData = z.infer<typeof createBookSchema>;
+const updateBookSchema = createBookSchema.partial();
+type updateBookFormData = z.infer<typeof updateBookSchema>;
 
 interface BookFormProps {
-  onSuccess?: () => void;
   setBookList: React.Dispatch<React.SetStateAction<BookDto[]>>;
+  editingBook: BookDto;
+  setIsEditDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function BookForm({ onSuccess, setBookList }: BookFormProps) {
-  const form = useForm<CreateBookFormData>({
-    resolver: zodResolver(createBookSchema),
+export function EditBookForm({ setBookList, editingBook, setIsEditDialogOpen }: BookFormProps) {
+  const form = useForm<updateBookFormData>({
+    resolver: zodResolver(updateBookSchema),
     defaultValues: {
-      isbn: "",
-      title: "",
-      authorName: "",
-      pageNumbers: 0,
-      category: "",
-      description: "",
-      publicationDate: "",
-      status: "rascunho",
-      authorType: "person",
-      personDateOfBirth: "",
-      institutionCity: "",
+      isbn: editingBook.isbn,
+      title: editingBook.material.title,
+      authorName: editingBook.material.author.name,
+      pageNumbers: editingBook.pageNumbers,
+      category: editingBook.material.category,
+      description: editingBook.material.description,
+      publicationDate: editingBook.material.publicationDate,
+      status: (["publicado", "enviado", "rascunho"].includes(editingBook.material.status)
+        ? editingBook.material.status
+        : "rascunho") as "publicado" | "enviado" | "rascunho",
+      authorType: editingBook.material.author.person ? "person" : "institution",
+      personDateOfBirth: editingBook.material.author.person?.birthDate,
+      institutionCity: editingBook.material.author.institution?.city,
     },
   });
 
@@ -41,17 +45,17 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
     name: "authorType",
   });
 
-  const onSubmit = async (data: CreateBookFormData) => {
+  const onSubmit = async (data: updateBookFormData) => {
     data = {
       ...data,
       personDateOfBirth: data.authorType === "person" ? data.personDateOfBirth : undefined,
       institutionCity: data.authorType === "institution" ? data.institutionCity : undefined,
     };
 
-    await createBook(data);
+    Response = await editBook(data);
     const books = await getAllBooks();
     setBookList(books);
-    onSuccess?.();
+    setIsEditDialogOpen(false);
   };
 
   return (
@@ -66,7 +70,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>ISBN</FormLabel>
                   <FormControl>
-                    <Input placeholder="978-3-16-148410-0" {...field} />
+                    <Input placeholder={editingBook.isbn} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -79,7 +83,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Título</FormLabel>
                   <FormControl>
-                    <Input placeholder="Título do livro" {...field} />
+                    <Input placeholder={editingBook.material.title} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -95,7 +99,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Autor</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nome do autor" {...field} />
+                    <Input placeholder={editingBook.material.author.name} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -110,7 +114,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecione o tipo" />
+                        <SelectValue placeholder="Selecione o tipo do autor" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -133,7 +137,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                   <FormItem className="flex-1">
                     <FormLabel>Data de Nascimento</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input type="date" placeholder={editingBook.material.author.person?.birthDate} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -151,7 +155,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                   <FormItem className="flex-1">
                     <FormLabel>Cidade da Instituição</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex: São Paulo" {...field} />
+                      <Input placeholder={editingBook.material.author.institution?.city} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -170,7 +174,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                   <FormControl>
                     <Input
                       type="number"
-                      placeholder="Ex: 300"
+                      placeholder={editingBook.pageNumbers.toString()}
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                       value={field.value ?? ""}
@@ -187,7 +191,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Categoria</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Romance, Ciência" {...field} />
+                    <Input placeholder={editingBook.material.category} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -203,7 +207,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Data de Publicação</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <Input type="date" placeholder={editingBook.material.publicationDate} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -218,12 +222,12 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecione o status" />
+                        <SelectValue placeholder={editingBook.material.status} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="rascunho">Rascunho</SelectItem>
-                      <SelectItem value="published">Publicado</SelectItem>
+                      <SelectItem value="publicado">Publicado</SelectItem>
                       <SelectItem value="enviado">Enviado</SelectItem>
                     </SelectContent>
                   </Select>
@@ -248,14 +252,14 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
           />
 
           <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline" onClick={() => onSuccess?.()}>
+            <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancelar
             </Button>
             <Button
               className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700"
               type="submit"
             >
-              Cadastrar Livro
+              Editar Livro
             </Button>
           </div>
         </form>
