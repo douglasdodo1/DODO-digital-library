@@ -62,6 +62,14 @@ export function DialogEditMaterial({
             setIsEditDialogOpen={setIsEditDialogOpen}
           />
         )}
+
+        {getType(editingItem) === "article" && (
+          <EditArticleForm
+            setArticleList={setArticleList}
+            editingArticle={editingItem as ArticleDto}
+            setIsEditDialogOpen={setIsEditDialogOpen}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

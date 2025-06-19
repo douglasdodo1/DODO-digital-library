@@ -1,8 +1,8 @@
 import axios from "axios";
 import { CREATE_ARTICLE } from "../query/create-article-query";
-import { CreateArticleInput } from "@/app/inputs/article/create-article-input";
+import { articleInput } from "@/app/inputs/article/article-input";
 
-export async function createArticle(input: CreateArticleInput) {
+export async function createArticle(input: articleInput) {
   try {
     const response = await axios.post(
       "http://localhost:3000/graphql",
@@ -17,7 +17,6 @@ export async function createArticle(input: CreateArticleInput) {
         },
       }
     );
-    console.log(`resposta: ${response.data}`);
     return response.data;
   } catch (error) {
     console.error("Erro ao criar artigo:", error);
