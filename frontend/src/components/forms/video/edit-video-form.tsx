@@ -1,4 +1,5 @@
-// create-video-form.tsx
+"use client";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { z } from "zod";
@@ -7,32 +8,37 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createVideo } from "@/graphql/video/mutations/create-video";
 import { getAllVideos } from "@/graphql/video/mutations/get-all-videos";
 import { VideoDto } from "@/dtos/video-dto";
-import { createVideoSchema } from "../schemas/video/create-video-schema";
+import { createVideoSchema } from "../../schemas/video/create-video-schema";
+import { editVideo } from "@/graphql/video/mutations/edit-video";
 
-type CreateVideoFormData = z.infer<typeof createVideoSchema>;
+const updateVideoSchema = createVideoSchema.partial().extend({ id: z.number() });
+type updateVideoFormData = z.infer<typeof updateVideoSchema>;
 
 interface VideoFormProps {
-  onSuccess?: () => void;
   setVideoList: React.Dispatch<React.SetStateAction<VideoDto[]>>;
+  editingVideo: VideoDto;
+  setIsEditDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
-  const form = useForm<CreateVideoFormData>({
-    resolver: zodResolver(createVideoSchema),
+export function EditVideoForm({ setVideoList, editingVideo, setIsEditDialogOpen }: VideoFormProps) {
+  const form = useForm<updateVideoFormData>({
+    resolver: zodResolver(updateVideoSchema),
     defaultValues: {
-      title: "",
-      authorName: "",
-      authorType: "person",
-      personDateOfBirth: "",
-      institutionCity: "",
-      durationMinutes: 0,
-      category: "",
-      publicationDate: "",
-      status: "rascunho",
-      description: "",
+      id: Number(editingVideo.id),
+      title: editingVideo.material.title,
+      authorName: editingVideo.material.author.name,
+      durationMinutes: editingVideo.durationMinutes,
+      category: editingVideo.material.category,
+      description: editingVideo.material.description,
+      publicationDate: editingVideo.material.publicationDate,
+      status: (["publicado", "enviado", "rascunho"].includes(editingVideo.material.status)
+        ? editingVideo.material.status
+        : "rascunho") as "publicado" | "enviado" | "rascunho",
+      authorType: editingVideo.material.author.person ? "person" : "institution",
+      personDateOfBirth: editingVideo.material.author.person?.birthDate,
+      institutionCity: editingVideo.material.author.institution?.city,
     },
   });
 
@@ -41,24 +47,23 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
     name: "authorType",
   });
 
-  const onSubmit = async (data: CreateVideoFormData) => {
+  const onSubmit = async (data: updateVideoFormData) => {
     data = {
       ...data,
       personDateOfBirth: data.authorType === "person" ? data.personDateOfBirth : undefined,
       institutionCity: data.authorType === "institution" ? data.institutionCity : undefined,
     };
-    console.log(data);
-    Response = await createVideo(data);
-    console.log(Response);
-    const books = await getAllVideos();
-    setVideoList(books);
-    onSuccess?.();
+    await editVideo(data);
+
+    const videos = await getAllVideos();
+    setVideoList(videos);
+    setIsEditDialogOpen(false);
   };
 
   return (
     <div className="w-full max-w-3xl mx-auto">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
             control={form.control}
             name="title"
@@ -66,9 +71,11 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
               <FormItem>
                 <FormLabel>Título</FormLabel>
                 <FormControl>
-                  <Input placeholder="Título do vídeo" {...field} />
+                  <Input placeholder={editingVideo.material.title} {...field} />
                 </FormControl>
-                <FormMessage />
+                <div className="min-h-[1.25rem]">
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
@@ -81,9 +88,11 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Autor</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nome do autor" {...field} />
+                    <Input placeholder={editingVideo.material.author.name} {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -96,7 +105,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecione o tipo" />
+                        <SelectValue placeholder={editingVideo.material.author.person ? "Pessoa" : "Instituição"} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -104,7 +113,9 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                       <SelectItem value="institution">Instituição</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -118,9 +129,11 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                 <FormItem>
                   <FormLabel>Data de Nascimento</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <Input type="date" placeholder={editingVideo.material.author.person?.birthDate} {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -134,9 +147,11 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                 <FormItem>
                   <FormLabel>Cidade da Instituição</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: São Paulo" {...field} />
+                    <Input placeholder={editingVideo.material.author.institution?.city} {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -152,12 +167,14 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                   <FormControl>
                     <Input
                       type="number"
-                      placeholder="Ex: 90"
+                      placeholder={editingVideo.durationMinutes.toString()}
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -168,9 +185,11 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Categoria</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Documentário, Educação" {...field} />
+                    <Input placeholder={editingVideo.material.category} {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -184,9 +203,11 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                 <FormItem className="flex-1">
                   <FormLabel>Data de Publicação</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <Input type="date" placeholder={editingVideo.material.publicationDate} {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -199,16 +220,18 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecione o status" />
+                        <SelectValue placeholder={editingVideo.material.status} />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="rascunho">Rascunho</SelectItem>
-                      <SelectItem value="published">Publicado</SelectItem>
+                      <SelectItem value="publicado">Publicado</SelectItem>
                       <SelectItem value="enviado">Enviado</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -221,15 +244,17 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
               <FormItem>
                 <FormLabel>Descrição</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="Descrição do vídeo" {...field} />
+                  <Textarea placeholder={editingVideo.material.description} {...field} />
                 </FormControl>
-                <FormMessage />
+                <div className="min-h-[1.25rem]">
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
 
           <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline" onClick={() => onSuccess?.()}>
+            <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancelar
             </Button>
             <Button

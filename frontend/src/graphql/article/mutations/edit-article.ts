@@ -1,13 +1,13 @@
-import { videoInput } from "@/app/inputs/video-input";
+import { articleInput } from "@/app/inputs/article/article-input";
 import axios from "axios";
-import { CREATE_VIDEO } from "../query/create-video-input";
+import { EDIT_ARTICLE } from "../query/edit-article-query";
 
-export async function createVideo(input: videoInput) {
+export async function editArticle(input: Partial<articleInput>) {
   try {
     const response = await axios.post(
       "http://localhost:3000/graphql",
       {
-        query: CREATE_VIDEO,
+        query: EDIT_ARTICLE,
         variables: { input },
       },
       {
@@ -20,7 +20,7 @@ export async function createVideo(input: videoInput) {
     console.log(`resposta: ${response.data}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao criar video:", error);
+    console.error("Erro ao editar artigo:", error);
     throw error;
   }
 }

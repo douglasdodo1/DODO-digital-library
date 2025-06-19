@@ -1,7 +1,7 @@
 import { MaterialDto } from "./material-dto";
 
 export interface VideoDto {
-  id: string;
+  id: number;
   durationMinutes: number;
   material: MaterialDto;
 }
