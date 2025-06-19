@@ -6,37 +6,32 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { createBook } from "@/graphql/book/mutations/create-book";
 import { BookDto } from "@/dtos/book-dto";
 import { getAllBooks } from "@/graphql/book/mutations/get-all-books";
-import { createBookSchema } from "../schemas/book/create-book-schema";
-import { editBook } from "@/graphql/book/mutations/edit-book";
+import { createBookSchema } from "../../schemas/book/create-book-schema";
 
-const updateBookSchema = createBookSchema.partial();
-type updateBookFormData = z.infer<typeof updateBookSchema>;
+type CreateBookFormData = z.infer<typeof createBookSchema>;
 
 interface BookFormProps {
   onSuccess?: () => void;
   setBookList: React.Dispatch<React.SetStateAction<BookDto[]>>;
-  editingBook: BookDto;
-  setIsEditDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDialogOpen }: BookFormProps) {
-  const form = useForm<updateBookFormData>({
-    resolver: zodResolver(updateBookSchema),
+export function BookForm({ onSuccess, setBookList }: BookFormProps) {
+  const form = useForm<CreateBookFormData>({
+    resolver: zodResolver(createBookSchema),
     defaultValues: {
-      isbn: editingBook.isbn,
-      title: editingBook.material.title,
-      authorName: editingBook.material.author.name,
-      pageNumbers: editingBook.pageNumbers,
-      category: editingBook.material.category,
-      description: editingBook.material.description,
-      publicationDate: editingBook.material.publicationDate,
-      status: (["publicado", "enviado", "rascunho"].includes(editingBook.material.status)
-        ? editingBook.material.status
-        : "rascunho") as "publicado" | "enviado" | "rascunho",
+      isbn: "",
+      title: "",
+      authorName: "",
+      pageNumbers: 0,
+      category: "",
+      description: "",
+      publicationDate: "",
+      status: "rascunho",
       authorType: "person",
-      personDateOfBirth: editingBook.material.author.person?.birthDate,
+      personDateOfBirth: "",
       institutionCity: "",
     },
   });
@@ -46,25 +41,25 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
     name: "authorType",
   });
 
-  const onSubmit = async (data: updateBookFormData) => {
+  const onSubmit = async (data: CreateBookFormData) => {
     data = {
       ...data,
       personDateOfBirth: data.authorType === "person" ? data.personDateOfBirth : undefined,
       institutionCity: data.authorType === "institution" ? data.institutionCity : undefined,
     };
 
-    console.log(data);
-    Response = await editBook(data);
-    console.log(Response);
-    const books = await getAllBooks();
-    setBookList(books);
-    onSuccess?.();
+    const Response = await createBook(data);
+    if (Response.data) {
+      const books = await getAllBooks();
+      setBookList(books);
+      onSuccess?.();
+    }
   };
 
   return (
     <div className="w-full max-w-3xl mx-auto">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex gap-6">
             <FormField
               control={form.control}
@@ -73,9 +68,11 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                 <FormItem className="flex-1">
                   <FormLabel>ISBN</FormLabel>
                   <FormControl>
-                    <Input placeholder={editingBook.isbn} {...field} />
+                    <Input placeholder="978-3-16-148410-0" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -86,9 +83,11 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                 <FormItem className="flex-1">
                   <FormLabel>Título</FormLabel>
                   <FormControl>
-                    <Input placeholder={editingBook.material.title} {...field} />
+                    <Input placeholder="Título do livro" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -102,9 +101,11 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                 <FormItem className="flex-1">
                   <FormLabel>Autor</FormLabel>
                   <FormControl>
-                    <Input placeholder={editingBook.material.author.name} {...field} />
+                    <Input placeholder="Nome do autor" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -117,7 +118,7 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Selecione o tipo do autor" />
+                        <SelectValue placeholder="Selecione o tipo" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -125,7 +126,9 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                       <SelectItem value="institution">Instituição</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -140,9 +143,11 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                   <FormItem className="flex-1">
                     <FormLabel>Data de Nascimento</FormLabel>
                     <FormControl>
-                      <Input type="date" placeholder={editingBook.material.author.person?.birthDate} {...field} />
+                      <Input type="date" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <div className="min-h-[1.25rem]">
+                      <FormMessage />
+                    </div>
                   </FormItem>
                 )}
               />
@@ -158,9 +163,11 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                   <FormItem className="flex-1">
                     <FormLabel>Cidade da Instituição</FormLabel>
                     <FormControl>
-                      <Input placeholder={editingBook.material.author.institution?.city} {...field} />
+                      <Input placeholder="Ex: São Paulo" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <div className="min-h-[1.25rem]">
+                      <FormMessage />
+                    </div>
                   </FormItem>
                 )}
               />
@@ -177,13 +184,15 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                   <FormControl>
                     <Input
                       type="number"
-                      placeholder={editingBook.pageNumbers.toString()}
+                      placeholder="Ex: 300"
                       {...field}
                       onChange={(e) => field.onChange(Number(e.target.value))}
                       value={field.value ?? ""}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -194,9 +203,11 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                 <FormItem className="flex-1">
                   <FormLabel>Categoria</FormLabel>
                   <FormControl>
-                    <Input placeholder={editingBook.material.category} {...field} />
+                    <Input placeholder="Ex: Romance, Ciência" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -210,9 +221,11 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                 <FormItem className="flex-1">
                   <FormLabel>Data de Publicação</FormLabel>
                   <FormControl>
-                    <Input type="date" placeholder={editingBook.material.publicationDate} {...field} />
+                    <Input type="date" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -225,16 +238,18 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder={editingBook.material.status} />
+                        <SelectValue placeholder="Selecione o status" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="rascunho">Rascunho</SelectItem>
-                      <SelectItem value="published">Publicado</SelectItem>
+                      <SelectItem value="publicado">Publicado</SelectItem>
                       <SelectItem value="enviado">Enviado</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <div className="min-h-[1.25rem]">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -249,20 +264,22 @@ export function EditBookForm({ onSuccess, setBookList, editingBook, setIsEditDia
                 <FormControl>
                   <Textarea placeholder="Descrição do livro" {...field} />
                 </FormControl>
-                <FormMessage />
+                <div className="min-h-[1.25rem]">
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
 
           <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <Button type="button" variant="outline" onClick={() => onSuccess?.()}>
               Cancelar
             </Button>
             <Button
               className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700"
               type="submit"
             >
-              Editar Livro
+              Cadastrar Livro
             </Button>
           </div>
         </form>

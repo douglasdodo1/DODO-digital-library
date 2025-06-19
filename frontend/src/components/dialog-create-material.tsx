@@ -2,12 +2,12 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogOverlay, DialogTitle } from "./ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
-import { BookForm } from "./forms/create-book-form";
-import { ArticleForm } from "./forms/create-article-form";
+import { BookForm } from "./forms/book/create-book-form";
+import { ArticleForm } from "./forms/article/create-article-form";
 import { BookDto } from "@/dtos/book-dto";
 import { ArticleDto } from "@/dtos/article-dto";
 import { VideoDto } from "@/dtos/video-dto";
-import { VideoForm } from "./forms/create-video-form";
+import { VideoForm } from "./forms/video/create-video-form";
 
 interface Props {
   isCreateDialogOpen: boolean;

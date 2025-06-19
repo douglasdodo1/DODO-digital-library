@@ -17,7 +17,6 @@ export async function createBook(input: bookInput) {
         },
       }
     );
-    console.log(`resposta: ${response.data}`);
     return response.data;
   } catch (error) {
     console.error("Erro ao criar livro:", error);
