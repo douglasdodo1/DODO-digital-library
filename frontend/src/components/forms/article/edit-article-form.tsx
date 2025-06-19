@@ -7,32 +7,37 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { createArticleSchema } from "../schemas/article/create-article-schema";
-import { createArticle } from "@/graphql/article/mutations/create-article";
+import { createArticleSchema } from "../../schemas/article/create-article-schema";
 import { ArticleDto } from "@/dtos/article-dto";
+import { editArticle } from "@/graphql/article/mutations/edit-article";
+import { getAllArticles } from "@/graphql/article/mutations/get-all-articles";
 
-type CreateArticleFormData = z.infer<typeof createArticleSchema>;
+const updateArticleSchema = createArticleSchema.partial();
+type updateArticleFormData = z.infer<typeof updateArticleSchema>;
 
 interface BookFormProps {
-  onSuccess?: () => void;
   setArticleList: React.Dispatch<React.SetStateAction<ArticleDto[]>>;
+  editingArticle: ArticleDto;
+  setIsEditDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function ArticleForm({ onSuccess }: BookFormProps) {
-  const form = useForm<CreateArticleFormData>({
-    resolver: zodResolver(createArticleSchema),
+export function EditArticleForm({ setArticleList, editingArticle, setIsEditDialogOpen }: BookFormProps) {
+  const form = useForm<updateArticleFormData>({
+    resolver: zodResolver(updateArticleSchema),
     defaultValues: {
-      doi: "",
-      title: "",
-      authorName: "",
-      language: "",
-      category: "",
-      description: "",
-      publicationDate: "",
-      status: "rascunho",
-      authorType: "person",
-      personDateOfBirth: "",
-      institutionCity: "",
+      doi: editingArticle.doi,
+      title: editingArticle.material.title,
+      authorName: editingArticle.material.author.name,
+      language: editingArticle.language,
+      category: editingArticle.material.category,
+      description: editingArticle.material.description,
+      publicationDate: editingArticle.material.publicationDate,
+      status: (["publicado", "enviado", "rascunho"].includes(editingArticle.material.status)
+        ? editingArticle.material.status
+        : "rascunho") as "publicado" | "enviado" | "rascunho",
+      authorType: editingArticle.material.author.person ? "person" : "institution",
+      personDateOfBirth: editingArticle.material.author.person?.birthDate,
+      institutionCity: editingArticle.material.author.institution?.city,
     },
   });
 
@@ -41,17 +46,16 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
     name: "authorType",
   });
 
-  const onSubmit = async (data: CreateArticleFormData) => {
+  const onSubmit = async (data: updateArticleFormData) => {
     data = {
       ...data,
       personDateOfBirth: data.authorType === "person" ? data.personDateOfBirth : undefined,
       institutionCity: data.authorType === "institution" ? data.institutionCity : undefined,
     };
-    console.log(data);
-
-    const Response = await createArticle(data);
-    console.log(Response);
-    onSuccess?.();
+    await editArticle(data);
+    const articles = await getAllArticles();
+    setArticleList(articles);
+    setIsEditDialogOpen(false);
   };
 
   return (
@@ -214,7 +218,7 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="rascunho">Rascunho</SelectItem>
-                      <SelectItem value="published">Publicado</SelectItem>
+                      <SelectItem value="publicado">Publicado</SelectItem>
                       <SelectItem value="enviado">Enviado</SelectItem>
                     </SelectContent>
                   </Select>
@@ -239,7 +243,7 @@ export function ArticleForm({ onSuccess }: BookFormProps) {
           />
 
           <div className="flex justify-end gap-4">
-            <Button type="button" variant="outline" onClick={() => onSuccess?.()}>
+            <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancelar
             </Button>
             <Button

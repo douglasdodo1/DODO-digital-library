@@ -9,10 +9,12 @@ export const getAllArticles = async () => {
     },
     {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJjcGYiOiIxMjA4NTE3MjQ0MCIsImV4cCI6MTc0OTkxMDQ0NX0.Xma8Kwm-Arx4b7_g_i43Gmy4TrryidJTO6cNvMQPx80`,
+        Authorization: `Bearer ${localStorage["token"]}`,
         "Content-Type": "application/json",
       },
     }
   );
+  console.log("AQUI");
+  console.log("resposta:", JSON.stringify(response.data, null, 2));
   return response.data.data?.allArticles || [];
 };
