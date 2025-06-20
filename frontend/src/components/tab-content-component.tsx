@@ -61,6 +61,7 @@ export function TabContentComponent({ materialList, value, setBookList, setArtic
         editingItem={editingItem}
         setEditingItem={setEditingItem}
         setBookList={setBookList}
+        bookList={materialList as BookDto[]}
         setArticleList={setArticleList}
         setVideoList={setVideoList}
       />
@@ -87,7 +88,9 @@ export function TabContentComponent({ materialList, value, setBookList, setArtic
                   ) : (
                     <Video size={24} className="text-amber-600 mb-2" />
                   )}
-                  <Badge className="bg-amber-100 text-amber-800">{material.material.category}</Badge>
+                  <Badge className="bg-amber-100 text-amber-800">
+                    {material.material ? material.material.category : ""}
+                  </Badge>
                 </div>
                 <CardTitle className="text-amber-800">{material.material?.title ?? "Sem título"}</CardTitle>
                 <CardDescription className="text-amber-600">
@@ -101,7 +104,7 @@ export function TabContentComponent({ materialList, value, setBookList, setArtic
                 <div className="w-full flex justify-between">
                   <div className="flex items-center text-xs text-amber-600">
                     <Calendar className="w-3 h-3 mr-1" />
-                    {formatDate(material.material.publicationDate)}
+                    {material.material ? formatDate(material.material.publicationDate) : ""}
                   </div>
                   <div className="flex items-center space-x-2">
                     <Button

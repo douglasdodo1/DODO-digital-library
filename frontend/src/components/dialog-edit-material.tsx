@@ -3,7 +3,6 @@ import { BookDto } from "@/dtos/book-dto";
 import { ArticleDto } from "@/dtos/article-dto";
 import { VideoDto } from "@/dtos/video-dto";
 import { EditBookForm } from "./forms/book/edit-book-form";
-import { MaterialDto } from "@/dtos/material-dto";
 import { EditArticleForm } from "./forms/article/edit-article-form";
 import { EditVideoForm } from "./forms/video/edit-video-form";
 
@@ -15,6 +14,7 @@ interface Props {
   editingItem: Material | null;
   setEditingItem: React.Dispatch<React.SetStateAction<Material | null>>;
   setBookList: React.Dispatch<React.SetStateAction<BookDto[]>>;
+  bookList: BookDto[];
   setArticleList: React.Dispatch<React.SetStateAction<ArticleDto[]>>;
   setVideoList: React.Dispatch<React.SetStateAction<VideoDto[]>>;
 }
@@ -25,6 +25,7 @@ export function DialogEditMaterial({
   editingItem,
   setEditingItem,
   setBookList,
+  bookList,
   setArticleList,
   setVideoList,
 }: Props) {
@@ -60,6 +61,7 @@ export function DialogEditMaterial({
             setBookList={setBookList}
             editingBook={editingItem as BookDto}
             setIsEditDialogOpen={setIsEditDialogOpen}
+            setEditingBook={setEditingItem as React.Dispatch<React.SetStateAction<BookDto>>}
           />
         )}
 
