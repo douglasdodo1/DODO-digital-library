@@ -1,14 +1,12 @@
 import axios from "axios";
-import { bookInput } from "@/app/inputs/book/book-input";
-import { EDIT_BOOK } from "../query/edit-book-query";
+import { GET_USER } from "../query/get-user-query";
 
-export async function editBook(input: Partial<bookInput>) {
+export async function getUser() {
   try {
     const response = await axios.post(
       "http://localhost:3000/graphql",
       {
-        query: EDIT_BOOK,
-        variables: { input },
+        query: GET_USER,
       },
       {
         headers: {
@@ -17,11 +15,10 @@ export async function editBook(input: Partial<bookInput>) {
         },
       }
     );
-    console.log("Resposta: " + JSON.stringify(response));
-
+    console.log(`resposta: ${response.data}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao editar livro:", error);
+    console.error("Erro ao buscar usuario:", error);
     throw error;
   }
 }

@@ -34,6 +34,8 @@ services:
       - app-network
     environment:
       - WATCHPACK_POLLING=true
+    depends_on:
+      - backend
 
   db:
     image: postgres:16

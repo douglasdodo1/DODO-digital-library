@@ -1,9 +1,14 @@
+"use client";
 import { Library, Search, User, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useRouter } from "next/navigation";
+import { DialogEditUser } from "./dialog-edit-user";
+import { useState } from "react";
 
 export function Header() {
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState<boolean>(false);
+
   const router = useRouter();
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -11,6 +16,7 @@ export function Header() {
   };
   return (
     <header className="bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg">
+      <DialogEditUser isEditDialogOpen={isEditDialogOpen} setIsEditDialogOpen={setIsEditDialogOpen} />
       <div className="w-full px-8 py-4">
         <div className="flex items-center w-full justify-between">
           <div className="flex items-center">
@@ -30,7 +36,12 @@ export function Header() {
               />
             </div>
 
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/20">
+            <Button
+              onClick={() => setIsEditDialogOpen(true)}
+              variant="ghost"
+              size="icon"
+              className="text-white hover:bg-white/20"
+            >
               <User className="w-5 h-5" />
             </Button>
 

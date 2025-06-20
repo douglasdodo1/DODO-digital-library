@@ -11,6 +11,7 @@ module Mutations
       def resolve(input:)
         require_authentication!
         user = context[:current_user]
+        raise GraphQL::ExecutionError, "Nao autorizado" unless user.cpf == input[:cpf]
 
         user.destroy!
         { success: true, errors: [] }
