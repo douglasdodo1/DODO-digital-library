@@ -69,6 +69,9 @@ export function TabContentComponent({ materialList, value, setBookList, setArtic
         setIsDeleteDialogOpen={setIsDeleteDialogOpen}
         deletingItem={deletingItem}
         setDeletingItem={setDeletingItem}
+        setBookList={setBookList}
+        setArticleList={setArticleList}
+        setVideoList={setVideoList}
       />
 
       <TabsContent value={value} className="mt-6">
