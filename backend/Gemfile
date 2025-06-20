@@ -16,7 +16,7 @@ gem "kaminari"
 gem "jwt"
 gem "pundit"
 gem 'rack-cors'
-
+gem 'rails_12factor'
 
 
 group :development, :test do
