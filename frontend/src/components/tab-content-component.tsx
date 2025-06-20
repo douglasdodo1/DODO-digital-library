@@ -61,7 +61,6 @@ export function TabContentComponent({ materialList, value, setBookList, setArtic
         editingItem={editingItem}
         setEditingItem={setEditingItem}
         setBookList={setBookList}
-        bookList={materialList as BookDto[]}
         setArticleList={setArticleList}
         setVideoList={setVideoList}
       />

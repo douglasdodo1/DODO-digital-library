@@ -14,7 +14,6 @@ interface Props {
   editingItem: Material | null;
   setEditingItem: React.Dispatch<React.SetStateAction<Material | null>>;
   setBookList: React.Dispatch<React.SetStateAction<BookDto[]>>;
-  bookList: BookDto[];
   setArticleList: React.Dispatch<React.SetStateAction<ArticleDto[]>>;
   setVideoList: React.Dispatch<React.SetStateAction<VideoDto[]>>;
 }
@@ -25,7 +24,6 @@ export function DialogEditMaterial({
   editingItem,
   setEditingItem,
   setBookList,
-  bookList,
   setArticleList,
   setVideoList,
 }: Props) {
@@ -70,6 +68,7 @@ export function DialogEditMaterial({
             setArticleList={setArticleList}
             editingArticle={editingItem as ArticleDto}
             setIsEditDialogOpen={setIsEditDialogOpen}
+            setEditingArticle={setEditingItem as React.Dispatch<React.SetStateAction<ArticleDto>>}
           />
         )}
 

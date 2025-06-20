@@ -10,7 +10,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { createArticleSchema } from "../../schemas/article/create-article-schema";
 import { ArticleDto } from "@/dtos/article-dto";
 import { editArticle } from "@/graphql/article/mutations/edit-article";
-import { getAllArticles } from "@/graphql/article/mutations/get-all-articles";
 
 const updateArticleSchema = createArticleSchema.partial();
 type updateArticleFormData = z.infer<typeof updateArticleSchema>;
@@ -19,9 +18,15 @@ interface BookFormProps {
   setArticleList: React.Dispatch<React.SetStateAction<ArticleDto[]>>;
   editingArticle: ArticleDto;
   setIsEditDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditingArticle: React.Dispatch<React.SetStateAction<ArticleDto>>;
 }
 
-export function EditArticleForm({ setArticleList, editingArticle, setIsEditDialogOpen }: BookFormProps) {
+export function EditArticleForm({
+  setArticleList,
+  editingArticle,
+  setIsEditDialogOpen,
+  setEditingArticle,
+}: BookFormProps) {
   const form = useForm<updateArticleFormData>({
     resolver: zodResolver(updateArticleSchema),
     defaultValues: {
@@ -52,9 +57,12 @@ export function EditArticleForm({ setArticleList, editingArticle, setIsEditDialo
       personDateOfBirth: data.authorType === "person" ? data.personDateOfBirth : undefined,
       institutionCity: data.authorType === "institution" ? data.institutionCity : undefined,
     };
-    await editArticle(data);
-    const articles = await getAllArticles();
-    setArticleList(articles);
+    const response = await editArticle(data);
+    if (!response.data) return;
+
+    const updatedArticle = response.data.updateArticle.article as ArticleDto;
+    setArticleList((prev) => prev.map((a) => (a.doi === updatedArticle.doi ? updatedArticle : a)));
+    setEditingArticle(updatedArticle);
     setIsEditDialogOpen(false);
   };
 
@@ -250,7 +258,7 @@ export function EditArticleForm({ setArticleList, editingArticle, setIsEditDialo
               className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700"
               type="submit"
             >
-              Cadastrar artigo
+              Editar artigo
             </Button>
           </div>
         </form>

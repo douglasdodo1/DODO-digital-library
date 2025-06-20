@@ -56,11 +56,8 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
     if (!response.data) return;
 
     const updatedBook = response.data.updateBook.book as BookDto;
-
     setBookList((prev) => prev.map((b) => (b.isbn === updatedBook.isbn ? updatedBook : b)));
-
     setEditingBook(updatedBook);
-
     setIsEditDialogOpen(false);
   };
 
