@@ -14,7 +14,6 @@ module Mutations
         user.update!(
           name: input[:name] || user.name,
           mail: input[:mail] || user.mail,
-          password: input[:password] || user.password
         )
 
         { user: user, errors: [] }

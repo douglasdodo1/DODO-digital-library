@@ -14,7 +14,5 @@ export const getAllArticles = async () => {
       },
     }
   );
-  console.log("AQUI");
-  console.log("resposta:", JSON.stringify(response.data, null, 2));
   return response.data.data?.allArticles || [];
 };

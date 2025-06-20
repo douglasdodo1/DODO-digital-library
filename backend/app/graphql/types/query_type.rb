@@ -6,7 +6,10 @@ module Types
       argument :cpf, String, required: true
     end
 
-    # Autor
+    field :user_authenticated, Types::User::UserType, null: true do
+      description "Retorna o usuário autenticado"
+    end
+
     field :author_by_id, Types::Author::AuthorType, null: true do
       description "Retorna um autor dado o ID"
       argument :id, ID, required: true
@@ -16,7 +19,6 @@ module Types
       description "Retorna todos os autores"
     end
 
-    # Pessoa e Instituição (ligados a Author)
     field :person_by_id, Types::Person::PersonType, null: true do
       description "Retorna uma pessoa dado o ID"
       argument :id, ID, required: true
@@ -66,6 +68,12 @@ module Types
 
     def user_by_cpf(cpf:)
       ::User.find_by(cpf: cpf)
+    end
+
+    def user_authenticated
+      userCpf = context[:current_user].cpf
+
+      ::User.find_by(cpf: userCpf)
     end
 
     def author_by_id(id:)

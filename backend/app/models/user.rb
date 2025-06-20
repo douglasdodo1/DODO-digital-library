@@ -5,7 +5,7 @@ class User < ApplicationRecord
   validate :valid_cpf
   validates :name, presence: true, length: { minimum: 2, maximum: 30 }
   validates :mail, presence: true, uniqueness: true
-  validates :password, presence: true, length: { minimum: 6 }
+  validates :password, presence: true, length: { minimum: 6 }, on: :create
 
   def valid_cpf
     if cpf.nil?

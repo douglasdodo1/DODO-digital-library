@@ -10,7 +10,6 @@ module Types
     rescue Pundit::NotAuthorizedError => e
       raise GraphQL::ExecutionError, "[BaseField] Unauthorized access: #{e.message}"
     rescue StandardError => e
-      # Optional: log the error using Rails.logger.error(e.message)
       raise GraphQL::ExecutionError, "[BaseField] Internal server error: #{e.message}"
     end
   end

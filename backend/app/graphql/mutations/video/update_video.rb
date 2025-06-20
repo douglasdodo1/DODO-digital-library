@@ -8,9 +8,14 @@ module Mutations
       type Types::Video::VideoPayload
 
       def resolve(input:)
+        require_authentication!
+
         video = ::Video.find_by!(id: input[:id])
         material = ::Material.find_by!(id: video.material_id)
         author = nil
+
+        userCpf = context[:current_user].cpf
+        raise GraphQL::ExecutionError, "Nao autorizado" unless userCpf == material.user_cpf
 
         if input[:authorName] && input[:authorType]
           case input[:authorType]
