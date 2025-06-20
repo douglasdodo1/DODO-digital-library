@@ -7,7 +7,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BookDto } from "@/dtos/book-dto";
-import { getAllBooks } from "@/graphql/book/mutations/get-all-books";
 import { createBookSchema } from "../../schemas/book/create-book-schema";
 import { editBook } from "@/graphql/book/mutations/edit-book";
 
@@ -17,10 +16,11 @@ type updateBookFormData = z.infer<typeof updateBookSchema>;
 interface BookFormProps {
   setBookList: React.Dispatch<React.SetStateAction<BookDto[]>>;
   editingBook: BookDto;
+  setEditingBook: React.Dispatch<React.SetStateAction<BookDto>>;
   setIsEditDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export function EditBookForm({ setBookList, editingBook, setIsEditDialogOpen }: BookFormProps) {
+export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEditDialogOpen }: BookFormProps) {
   const form = useForm<updateBookFormData>({
     resolver: zodResolver(updateBookSchema),
     defaultValues: {
@@ -46,15 +46,21 @@ export function EditBookForm({ setBookList, editingBook, setIsEditDialogOpen }: 
   });
 
   const onSubmit = async (data: updateBookFormData) => {
-    data = {
+    const payload = {
       ...data,
       personDateOfBirth: data.authorType === "person" ? data.personDateOfBirth : undefined,
       institutionCity: data.authorType === "institution" ? data.institutionCity : undefined,
     };
 
-    Response = await editBook(data);
-    const books = await getAllBooks();
-    setBookList(books);
+    const response = await editBook(payload);
+    if (!response.data) return;
+
+    const updatedBook = response.data.updateBook.book as BookDto;
+
+    setBookList((prev) => prev.map((b) => (b.isbn === updatedBook.isbn ? updatedBook : b)));
+
+    setEditingBook(updatedBook);
+
     setIsEditDialogOpen(false);
   };
 
