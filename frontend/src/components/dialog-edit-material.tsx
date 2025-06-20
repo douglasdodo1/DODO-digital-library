@@ -77,6 +77,7 @@ export function DialogEditMaterial({
             setVideoList={setVideoList}
             editingVideo={editingItem as VideoDto}
             setIsEditDialogOpen={setIsEditDialogOpen}
+            setEditingVideo={setEditingItem as React.Dispatch<React.SetStateAction<VideoDto>>}
           />
         )}
       </DialogContent>

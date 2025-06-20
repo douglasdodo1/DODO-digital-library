@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { getAllVideos } from "@/graphql/video/mutations/get-all-videos";
 import { VideoDto } from "@/dtos/video-dto";
 import { createVideoSchema } from "../../schemas/video/create-video-schema";
 import { editVideo } from "@/graphql/video/mutations/edit-video";
@@ -20,9 +19,10 @@ interface VideoFormProps {
   setVideoList: React.Dispatch<React.SetStateAction<VideoDto[]>>;
   editingVideo: VideoDto;
   setIsEditDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditingVideo: React.Dispatch<React.SetStateAction<VideoDto>>;
 }
 
-export function EditVideoForm({ setVideoList, editingVideo, setIsEditDialogOpen }: VideoFormProps) {
+export function EditVideoForm({ setVideoList, editingVideo, setIsEditDialogOpen, setEditingVideo }: VideoFormProps) {
   const form = useForm<updateVideoFormData>({
     resolver: zodResolver(updateVideoSchema),
     defaultValues: {
@@ -53,10 +53,12 @@ export function EditVideoForm({ setVideoList, editingVideo, setIsEditDialogOpen 
       personDateOfBirth: data.authorType === "person" ? data.personDateOfBirth : undefined,
       institutionCity: data.authorType === "institution" ? data.institutionCity : undefined,
     };
-    await editVideo(data);
+    const response = await editVideo(data);
+    if (!response.data) return;
 
-    const videos = await getAllVideos();
-    setVideoList(videos);
+    const updatedVideo = response.data.updateVideo.video as VideoDto;
+    setVideoList((prev) => prev.map((v) => (v.id === updatedVideo.id ? updatedVideo : v)));
+    setEditingVideo(updatedVideo);
     setIsEditDialogOpen(false);
   };
 
