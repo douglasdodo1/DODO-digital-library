@@ -5,6 +5,9 @@ import { DialogHeader } from "./ui/dialog";
 import { ArticleDto } from "@/dtos/article-dto";
 import { BookDto } from "@/dtos/book-dto";
 import { VideoDto } from "@/dtos/video-dto";
+import { deleteBook } from "@/graphql/book/mutations/delete-book";
+import { deleteArticle } from "@/graphql/article/mutations/delete-article";
+import { deleteVideo } from "@/graphql/video/mutations/delete-video";
 
 type Material = BookDto | ArticleDto | VideoDto;
 
@@ -13,6 +16,9 @@ interface Props {
   setIsDeleteDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   deletingItem: Material | null;
   setDeletingItem: React.Dispatch<React.SetStateAction<Material | null>>;
+  setBookList: React.Dispatch<React.SetStateAction<BookDto[]>>;
+  setArticleList: React.Dispatch<React.SetStateAction<ArticleDto[]>>;
+  setVideoList: React.Dispatch<React.SetStateAction<VideoDto[]>>;
 }
 
 export function DialogDeleteMaterial({
@@ -20,9 +26,42 @@ export function DialogDeleteMaterial({
   setIsDeleteDialogOpen,
   deletingItem,
   setDeletingItem,
+  setBookList,
+  setArticleList,
+  setVideoList,
 }: Props) {
-  const confirmDelete = () => {
+  const getType = (material: Material): string => {
+    if ("isbn" in material) {
+      return "book";
+    } else if ("doi" in material) {
+      return "article";
+    } else {
+      return "video";
+    }
+  };
+
+  const confirmDelete = async () => {
     console.log("Excluindo conteúdo:", deletingItem);
+    if (deletingItem) {
+      const type: string = getType(deletingItem);
+
+      if (type === "book") {
+        const bookToDelete = deletingItem as BookDto;
+        const response = await deleteBook(bookToDelete.isbn);
+        setBookList((prev) => prev.filter((b) => b.isbn !== bookToDelete.isbn));
+        console.log(response);
+      } else if (type === "article") {
+        const articleToDelete = deletingItem as ArticleDto;
+        const response = await deleteArticle(articleToDelete.doi);
+        setArticleList((prev) => prev.filter((a) => a.doi !== articleToDelete.doi));
+        console.log(response);
+      } else if (type === "video") {
+        const videoToDelete = deletingItem as VideoDto;
+        const response = await deleteVideo(videoToDelete.id);
+        setVideoList((prev) => prev.filter((v) => v.id !== videoToDelete.id));
+        console.log(response);
+      }
+    }
     setIsDeleteDialogOpen(false);
     setDeletingItem(null);
   };
