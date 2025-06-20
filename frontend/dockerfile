@@ -8,3 +8,4 @@ RUN npm install lightningcss-linux-x64-gnu
 COPY . .
 EXPOSE 4000
 CMD ["npm", "run", "dev" ]
+
