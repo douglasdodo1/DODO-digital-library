@@ -5,7 +5,7 @@ import { EDIT_VIDEO } from "../query/edit-video-query";
 export async function editVideo(input: Partial<videoInput>) {
   try {
     const response = await axios.post(
-      "http://localhost:3000/graphql",
+      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
       {
         query: EDIT_VIDEO,
         variables: { input },

@@ -4,7 +4,7 @@ import { GET_USER } from "../query/get-user-query";
 export async function getUser() {
   try {
     const response = await axios.post(
-      "http://localhost:3000/graphql",
+      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
       {
         query: GET_USER,
       },

@@ -5,7 +5,7 @@ import { CreateUserInput } from "@/app/inputs/create-user-input";
 export async function createUser(input: CreateUserInput) {
   try {
     const response = await axios.post(
-      "http://localhost:3000/graphql",
+      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
       {
         query: CREATE_USER,
         variables: { input },
