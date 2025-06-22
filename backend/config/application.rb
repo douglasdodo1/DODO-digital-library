@@ -30,8 +30,8 @@ module DodoDigitalLibrary
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-  config.time_zone = 'America/Sao_Paulo'
-  config.i18n.default_locale = :'pt-BR'
+  #config.time_zone = 'America/Sao_Paulo'
+  #config.i18n.default_locale = :'pt-BR'
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
