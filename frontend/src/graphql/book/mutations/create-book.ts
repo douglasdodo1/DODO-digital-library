@@ -5,7 +5,7 @@ import { CREATE_BOOK } from "@/graphql/book/query/create-book-query";
 export async function createBook(input: bookInput) {
   try {
     const response = await axios.post(
-      "http://localhost:3000/graphql",
+      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
       {
         query: CREATE_BOOK,
         variables: { input },

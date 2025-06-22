@@ -3,7 +3,7 @@ import axios from "axios";
 export async function deleteArticle(doi: string) {
   try {
     const response = await axios.post(
-      "http://localhost:3000/graphql",
+      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
       {
         query: `
           mutation DeleteArticle($input: DeleteArticleInput!) {

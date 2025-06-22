@@ -5,7 +5,7 @@ import { EDIT_ARTICLE } from "../query/edit-article-query";
 export async function editArticle(input: Partial<articleInput>) {
   try {
     const response = await axios.post(
-      "http://localhost:3000/graphql",
+      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
       {
         query: EDIT_ARTICLE,
         variables: { input },

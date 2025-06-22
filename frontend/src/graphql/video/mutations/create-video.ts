@@ -5,7 +5,7 @@ import { CREATE_VIDEO } from "../query/create-video-input";
 export async function createVideo(input: videoInput) {
   try {
     const response = await axios.post(
-      "http://localhost:3000/graphql",
+      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
       {
         query: CREATE_VIDEO,
         variables: { input },

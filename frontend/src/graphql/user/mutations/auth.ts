@@ -5,7 +5,7 @@ import { AUTH_QUERY } from "../query/auth-query";
 export async function auth(input: AuthDto) {
   try {
     const response = await axios.post(
-      "http://localhost:3000/graphql",
+      `${process.env.NEXT_PUBLIC_API_URL}/graphql`,
       {
         query: AUTH_QUERY,
         variables: { input },
