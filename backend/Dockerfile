@@ -20,4 +20,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["bash", "-lc", "bundle exec rails db:migrate && bundle exec puma -C config/puma.rb"]
+CMD ["bash", "-lc", "bundle exec rails db:migrate && bundle exec rails server -b 0.0.0.0 -p ${PORT:-3000}"]
