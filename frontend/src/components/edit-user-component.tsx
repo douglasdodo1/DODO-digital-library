@@ -42,8 +42,9 @@ export function EditUserComponent({ onSuccess }: { onSuccess?: () => void }) {
         if (res?.data?.userAuthenticated) {
           const u = res.data.userAuthenticated;
           setUser(u);
+          console.log(user);
+
           form.reset({ name: u.name, mail: u.mail });
-          router.push("/dashboard");
         }
       }
     };
@@ -67,7 +68,7 @@ export function EditUserComponent({ onSuccess }: { onSuccess?: () => void }) {
                 <FormLabel>Nome</FormLabel>
                 <FormControl>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-amber-600" />
+                    <User className="absolute left-3 top-3 h-4 w-4 text-amber-600" />
                     <Input {...field} className="pl-10" value={field.value ?? ""} />
                   </div>
                 </FormControl>
