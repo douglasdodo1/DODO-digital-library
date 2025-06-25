@@ -22,24 +22,28 @@ export default function DashboardComponent() {
   const [videoList, setVideoList] = useState<VideoDto[]>([]);
 
   useEffect(() => {
-    const fetchBooks = async () => {
-      const data = await getAllBooks();
-      setBookList(data);
-    };
+    const token = localStorage.getItem("token");
 
-    const fetchArticles = async () => {
-      const data = await getAllArticles();
-      setArticleList(data);
-    };
+    if (token) {
+      const fetchBooks = async () => {
+        const data = await getAllBooks();
+        setBookList(data);
+      };
 
-    const fetchVideos = async () => {
-      const data = await getAllVideos();
-      setVideoList(data);
-    };
+      const fetchArticles = async () => {
+        const data = await getAllArticles();
+        setArticleList(data);
+      };
 
-    fetchBooks();
-    fetchArticles();
-    fetchVideos();
+      const fetchVideos = async () => {
+        const data = await getAllVideos();
+        setVideoList(data);
+      };
+
+      fetchBooks();
+      fetchArticles();
+      fetchVideos();
+    }
   }, []);
 
   return (
@@ -97,9 +101,27 @@ export default function DashboardComponent() {
                 </TabsTrigger>
               </TabsList>
 
-              <TabContentComponent materialList={bookList} setBookList={setBookList} setArticleList={setArticleList} setVideoList={setVideoList} value="livros" />
-              <TabContentComponent materialList={articleList} setBookList={setBookList} setArticleList={setArticleList} setVideoList={setVideoList} value="artigos" />
-              <TabContentComponent materialList={videoList}  setBookList={setBookList} setArticleList={setArticleList} setVideoList={setVideoList} value="videos" />
+              <TabContentComponent
+                materialList={bookList}
+                setBookList={setBookList}
+                setArticleList={setArticleList}
+                setVideoList={setVideoList}
+                value="livros"
+              />
+              <TabContentComponent
+                materialList={articleList}
+                setBookList={setBookList}
+                setArticleList={setArticleList}
+                setVideoList={setVideoList}
+                value="artigos"
+              />
+              <TabContentComponent
+                materialList={videoList}
+                setBookList={setBookList}
+                setArticleList={setArticleList}
+                setVideoList={setVideoList}
+                value="videos"
+              />
             </Tabs>
           </div>
         </div>

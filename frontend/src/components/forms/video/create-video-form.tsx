@@ -65,14 +65,14 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                 <FormControl>
                   <Input placeholder="Título do vídeo" {...field} />
                 </FormControl>
-                <div className="min-h-[1.25rem]">
+                <div className="min-h-2">
                   <FormMessage />
                 </div>
               </FormItem>
             )}
           />
 
-          <div className="flex flex-row flex-wrap gap-x-6 gap-y-2 items-start">
+          <div className="flex flex-row flex-wrap gap-x-6 pb-2 items-start">
             <FormField
               control={form.control}
               name="authorName"
@@ -82,7 +82,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                   <FormControl>
                     <Input placeholder="Nome do autor" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -105,7 +105,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                       <SelectItem value="institution">Instituição</SelectItem>
                     </SelectContent>
                   </Select>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -123,7 +123,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -141,7 +141,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                   <FormControl>
                     <Input placeholder="Ex: São Paulo" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -149,7 +149,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
             />
           )}
 
-          <div className="flex gap-6">
+          <div className="flex gap-x-6 pb-2">
             <FormField
               control={form.control}
               name="durationMinutes"
@@ -164,7 +164,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                       onChange={(e) => field.onChange(Number(e.target.value))}
                     />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -179,7 +179,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                   <FormControl>
                     <Input placeholder="Ex: Documentário, Educação" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -187,7 +187,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
             />
           </div>
 
-          <div className="flex gap-6">
+          <div className="flex gap-x-6 pb-2">
             <FormField
               control={form.control}
               name="publicationDate"
@@ -197,7 +197,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -221,7 +221,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                       <SelectItem value="enviado">Enviado</SelectItem>
                     </SelectContent>
                   </Select>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -238,7 +238,7 @@ export function VideoForm({ onSuccess, setVideoList }: VideoFormProps) {
                 <FormControl>
                   <Textarea placeholder="Descrição do vídeo" {...field} />
                 </FormControl>
-                <div className="min-h-[1.25rem]">
+                <div className="min-h-2">
                   <FormMessage />
                 </div>
               </FormItem>

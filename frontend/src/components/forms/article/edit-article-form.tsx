@@ -69,8 +69,8 @@ export function EditArticleForm({
   return (
     <div className="w-full max-w-3xl mx-auto">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="flex gap-6">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="flex gap-x-6">
             <FormField
               control={form.control}
               name="doi"
@@ -80,7 +80,9 @@ export function EditArticleForm({
                   <FormControl>
                     <Input placeholder="Ex: 9783161484100" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -93,13 +95,15 @@ export function EditArticleForm({
                   <FormControl>
                     <Input placeholder="Ex: O Senhor dos Anéis" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
           </div>
 
-          <div className="flex flex-row flex-wrap gap-x-6 gap-y-2 items-start">
+          <div className="flex flex-row flex-wrap gap-x-6 items-start">
             <FormField
               control={form.control}
               name="authorName"
@@ -109,7 +113,9 @@ export function EditArticleForm({
                   <FormControl>
                     <Input placeholder="Ex: J. R. R. Tolkien" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -130,7 +136,9 @@ export function EditArticleForm({
                       <SelectItem value="institution">Instituição</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -146,7 +154,9 @@ export function EditArticleForm({
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -162,13 +172,15 @@ export function EditArticleForm({
                   <FormControl>
                     <Input placeholder="Ex: São Paulo" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
           )}
 
-          <div className="flex gap-6">
+          <div className="flex gap-x-6">
             <FormField
               control={form.control}
               name="language"
@@ -178,7 +190,9 @@ export function EditArticleForm({
                   <FormControl>
                     <Input type="text" placeholder="en" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -191,7 +205,9 @@ export function EditArticleForm({
                   <FormControl>
                     <Input placeholder="Ex: Ficção, Autoajuda" {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -206,7 +222,9 @@ export function EditArticleForm({
                 <FormControl>
                   <Input type="date" placeholder="Selecione a data" {...field} />
                 </FormControl>
-                <FormMessage />
+                <div className="min-h-2">
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
@@ -230,7 +248,9 @@ export function EditArticleForm({
                       <SelectItem value="enviado">Enviado</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -245,7 +265,9 @@ export function EditArticleForm({
                 <FormControl>
                   <Textarea placeholder="Resumo ou sinopse do livro" {...field} />
                 </FormControl>
-                <FormMessage />
+                <div className="min-h-2">
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />

@@ -65,7 +65,7 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
     <div className="w-full max-w-3xl mx-auto">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="flex gap-6">
+          <div className="flex gap-x-6">
             <FormField
               control={form.control}
               name="isbn"
@@ -75,7 +75,9 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
                   <FormControl>
                     <Input placeholder={editingBook.isbn} {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -88,7 +90,9 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
                   <FormControl>
                     <Input placeholder={editingBook.material.title} {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -104,7 +108,9 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
                   <FormControl>
                     <Input placeholder={editingBook.material.author.name} {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -125,14 +131,16 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
                       <SelectItem value="institution">Instituição</SelectItem>
                     </SelectContent>
                   </Select>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
           </div>
 
           {authorType === "person" && (
-            <div className="flex gap-6">
+            <div className="flex gap-x-6">
               <FormField
                 control={form.control}
                 name="personDateOfBirth"
@@ -142,7 +150,9 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
                     <FormControl>
                       <Input type="date" placeholder={editingBook.material.author.person?.birthDate} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <div className="min-h-2">
+                      <FormMessage />
+                    </div>
                   </FormItem>
                 )}
               />
@@ -150,7 +160,7 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
           )}
 
           {authorType === "institution" && (
-            <div className="flex gap-6">
+            <div className="flex gap-x-6">
               <FormField
                 control={form.control}
                 name="institutionCity"
@@ -160,14 +170,16 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
                     <FormControl>
                       <Input placeholder={editingBook.material.author.institution?.city} {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <div className="min-h-2">
+                      <FormMessage />
+                    </div>
                   </FormItem>
                 )}
               />
             </div>
           )}
 
-          <div className="flex gap-6">
+          <div className="flex gap-x-6">
             <FormField
               control={form.control}
               name="pageNumbers"
@@ -183,7 +195,9 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
                       value={field.value ?? ""}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
@@ -196,13 +210,15 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
                   <FormControl>
                     <Input placeholder={editingBook.material.category} {...field} />
                   </FormControl>
-                  <FormMessage />
+                  <div className="min-h-2">
+                    <FormMessage />
+                  </div>
                 </FormItem>
               )}
             />
           </div>
 
-          <div className="flex gap-6">
+          <div className="flex gap-x-6">
             <FormField
               control={form.control}
               name="publicationDate"

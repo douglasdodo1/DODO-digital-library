@@ -30,7 +30,7 @@ export function DialogCreateMaterial({
   return (
     <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
       <DialogOverlay className="fixed inset-0" />
-      <DialogContent className="w-[95vw] max-w-7xl">
+      <DialogContent className="w-[95vw] max-h-[85vh] max-w-7xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Adicionar Novo Conteúdo</DialogTitle>
           <DialogDescription>Preencha as informações para adicionar um novo item ao acervo.</DialogDescription>
