@@ -22,7 +22,8 @@ export function LoginComponent({ setIsLogin }: Props) {
 
   const router = useRouter();
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -30,19 +31,30 @@ export function LoginComponent({ setIsLogin }: Props) {
     if (token) {
       router.push("/dashboard");
     }
-  }, [router]);
+  }, [router, isLoading]);
 
   const onSubmit = async (data: AuthDto) => {
+    setIsLoading(true);
     const response = await auth(data);
     const token = response?.data?.loginUser?.token;
 
     if (token) {
       localStorage.setItem("token", token);
+      setIsLoading(false);
+
       router.push("/dashboard");
     } else {
       console.error("Token não recebido");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-amber-600 border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>
