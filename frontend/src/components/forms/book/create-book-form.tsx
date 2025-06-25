@@ -36,6 +36,14 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
     },
   });
 
+  const setErrors = (errors: { message: string }[]) => {
+    errors.forEach((error) => {
+      if (error.message.toLowerCase().includes("is not valid")) {
+        form.setError("isbn", { message: "ISBN inválido" });
+      }
+    });
+  };
+
   const authorType = useWatch({
     control: form.control,
     name: "authorType",
@@ -54,6 +62,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
       setBookList(books);
       onSuccess?.();
     }
+    setErrors(Response.errors);
   };
 
   return (

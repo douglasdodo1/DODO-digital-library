@@ -30,7 +30,7 @@ export function DialogCreateMaterial({
   return (
     <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
       <DialogOverlay className="fixed inset-0" />
-      <DialogContent className="w-[95vw] max-h-[85vh] max-w-7xl overflow-y-auto">
+      <DialogContent className="w-[95vw] max-h-[88vh] max-w-7xl overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Adicionar Novo Conteúdo</DialogTitle>
           <DialogDescription>Preencha as informações para adicionar um novo item ao acervo.</DialogDescription>
@@ -48,7 +48,7 @@ export function DialogCreateMaterial({
             </SelectContent>
           </Select>
         </div>
-        <div className="w-full">
+        <div className="w-full h-full">
           {contentType === "livro" && (
             <BookForm setBookList={setBookList} onSuccess={() => setIsCreateDialogOpen(false)} />
           )}

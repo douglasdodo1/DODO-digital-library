@@ -36,6 +36,14 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
     },
   });
 
+  const setErrors = (errors: { message: string }[]) => {
+    errors.forEach((error) => {
+      if (error.message.includes("Doi is invalid")) {
+        form.setError("doi", { message: "DOI inválido" });
+      }
+    });
+  };
+
   const authorType = useWatch({
     control: form.control,
     name: "authorType",
@@ -54,6 +62,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
       setArticleList(articles);
       onSuccess?.();
     }
+    setErrors(Response.errors);
   };
 
   return (
@@ -212,7 +221,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
                 <FormControl>
                   <Input type="date" placeholder="Selecione a data" {...field} />
                 </FormControl>
-                <div className="min-h-[1.25rem]">
+                <div className="min-h-2">
                   <FormMessage />
                 </div>
               </FormItem>
@@ -255,14 +264,14 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
                 <FormControl>
                   <Textarea placeholder="Resumo ou sinopse do livro" {...field} />
                 </FormControl>
-                <div className="min-h-[1.25rem]">
+                <div className="min-h-2">
                   <FormMessage />
                 </div>
               </FormItem>
             )}
           />
 
-          <div className="flex justify-end  gap-4">
+          <div className="flex justify-end  gap-x-4">
             <Button type="button" variant="outline" onClick={() => onSuccess?.()}>
               Cancelar
             </Button>

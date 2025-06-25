@@ -24,7 +24,6 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
   const form = useForm<updateBookFormData>({
     resolver: zodResolver(updateBookSchema),
     defaultValues: {
-      isbn: editingBook.isbn,
       title: editingBook.material.title,
       authorName: editingBook.material.author.name,
       pageNumbers: editingBook.pageNumbers,
@@ -48,6 +47,7 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
   const onSubmit = async (data: updateBookFormData) => {
     const payload = {
       ...data,
+      isbn: editingBook.isbn,
       personDateOfBirth: data.authorType === "person" ? data.personDateOfBirth : undefined,
       institutionCity: data.authorType === "institution" ? data.institutionCity : undefined,
     };
@@ -64,23 +64,8 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
   return (
     <div className="w-full max-w-3xl mx-auto">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="flex gap-x-6">
-            <FormField
-              control={form.control}
-              name="isbn"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel>ISBN</FormLabel>
-                  <FormControl>
-                    <Input placeholder={editingBook.isbn} {...field} />
-                  </FormControl>
-                  <div className="min-h-2">
-                    <FormMessage />
-                  </div>
-                </FormItem>
-              )}
-            />
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="flex gap-x-6 pb-2">
             <FormField
               control={form.control}
               name="title"
@@ -98,7 +83,7 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
             />
           </div>
 
-          <div className="flex flex-row flex-wrap gap-x-6 gap-y-2 items-start">
+          <div className="flex flex-row flex-wrap gap-x-6 pb-2 items-start">
             <FormField
               control={form.control}
               name="authorName"
@@ -179,7 +164,7 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
             </div>
           )}
 
-          <div className="flex gap-x-6">
+          <div className="flex flex-row flex-wrap gap-x-6 pb-2 items-start">
             <FormField
               control={form.control}
               name="pageNumbers"
@@ -218,7 +203,7 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
             />
           </div>
 
-          <div className="flex gap-x-6">
+          <div className="flex flex-row flex-wrap gap-x-6 pb-2 items-start">
             <FormField
               control={form.control}
               name="publicationDate"
@@ -270,7 +255,7 @@ export function EditBookForm({ setBookList, editingBook, setEditingBook, setIsEd
             )}
           />
 
-          <div className="flex justify-end gap-4">
+          <div className="flex justify-end gap-4 mt-4">
             <Button type="button" variant="outline" onClick={() => setIsEditDialogOpen(false)}>
               Cancelar
             </Button>
