@@ -89,13 +89,7 @@ This command starts three services:
 * **db**: PostgreSQL database
 * **frontend**: Next.js development server (port 4000)
 
-### 5. Database Initialization
-
-```bash
-docker-compose exec web rails db:create db:migrate db:seed
-```
-
-### 6. Start Frontend Dev Server (if needed outside Docker)
+### 5. Start Frontend Dev Server (if needed outside Docker)
 
 ```bash
 cd frontend
