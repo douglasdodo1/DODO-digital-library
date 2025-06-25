@@ -57,10 +57,10 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full  max-w-3xl mx-auto">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex gap-6">
+          <div className="flex gap-x-6 pb-2">
             <FormField
               control={form.control}
               name="isbn"
@@ -70,7 +70,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                   <FormControl>
                     <Input placeholder="978-3-16-148410-0" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -85,7 +85,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                   <FormControl>
                     <Input placeholder="Título do livro" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -93,7 +93,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
             />
           </div>
 
-          <div className="flex flex-row flex-wrap gap-x-6 gap-y-2 items-start">
+          <div className="flex flex-row flex-wrap gap-x-6 pb-2 items-start">
             <FormField
               control={form.control}
               name="authorName"
@@ -103,7 +103,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                   <FormControl>
                     <Input placeholder="Nome do autor" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -126,7 +126,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                       <SelectItem value="institution">Instituição</SelectItem>
                     </SelectContent>
                   </Select>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -135,7 +135,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
           </div>
 
           {authorType === "person" && (
-            <div className="flex gap-6">
+            <div className="flex gap-x-6 pb-2">
               <FormField
                 control={form.control}
                 name="personDateOfBirth"
@@ -145,7 +145,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
-                    <div className="min-h-[1.25rem]">
+                    <div className="min-h-2">
                       <FormMessage />
                     </div>
                   </FormItem>
@@ -165,7 +165,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                     <FormControl>
                       <Input placeholder="Ex: São Paulo" {...field} />
                     </FormControl>
-                    <div className="min-h-[1.25rem]">
+                    <div className="min-h-2">
                       <FormMessage />
                     </div>
                   </FormItem>
@@ -174,7 +174,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
             </div>
           )}
 
-          <div className="flex gap-6">
+          <div className="flex gap-x-6 pb-4">
             <FormField
               control={form.control}
               name="pageNumbers"
@@ -190,7 +190,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                       value={field.value ?? ""}
                     />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -205,7 +205,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                   <FormControl>
                     <Input placeholder="Ex: Romance, Ciência" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -213,7 +213,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
             />
           </div>
 
-          <div className="flex gap-6">
+          <div className="flex flex-row flex-wrap gap-x-6 pb-4 items-start">
             <FormField
               control={form.control}
               name="publicationDate"
@@ -223,7 +223,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -247,7 +247,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                       <SelectItem value="enviado">Enviado</SelectItem>
                     </SelectContent>
                   </Select>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -264,7 +264,7 @@ export function BookForm({ onSuccess, setBookList }: BookFormProps) {
                 <FormControl>
                   <Textarea placeholder="Descrição do livro" {...field} />
                 </FormControl>
-                <div className="min-h-[1.25rem]">
+                <div className="min-h-2">
                   <FormMessage />
                 </div>
               </FormItem>

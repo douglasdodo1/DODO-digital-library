@@ -82,7 +82,7 @@ export function EditVideoForm({ setVideoList, editingVideo, setIsEditDialogOpen,
             )}
           />
 
-          <div className="flex flex-row flex-wrap gap-x-6 gap-y-2 items-start">
+          <div className="flex flex-row flex-wrap gap-x-6  items-start">
             <FormField
               control={form.control}
               name="authorName"

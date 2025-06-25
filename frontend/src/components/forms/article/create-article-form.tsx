@@ -57,10 +57,10 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full max-w-3xl mx-auto ">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="flex gap-6">
+          <div className="flex gap-x-6 pb-2">
             <FormField
               control={form.control}
               name="doi"
@@ -70,7 +70,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
                   <FormControl>
                     <Input placeholder="Ex: 9783161484100" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -85,7 +85,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
                   <FormControl>
                     <Input placeholder="Ex: O Senhor dos Anéis" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -93,7 +93,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
             />
           </div>
 
-          <div className="flex flex-row flex-wrap gap-x-6 gap-y-2 items-start">
+          <div className="flex flex-row flex-wrap gap-x-6 pb-2 items-start">
             <FormField
               control={form.control}
               name="authorName"
@@ -103,7 +103,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
                   <FormControl>
                     <Input placeholder="Ex: J. R. R. Tolkien" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -126,7 +126,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
                       <SelectItem value="institution">Instituição</SelectItem>
                     </SelectContent>
                   </Select>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -144,7 +144,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
                   <FormControl>
                     <Input type="date" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -162,7 +162,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
                   <FormControl>
                     <Input placeholder="Ex: São Paulo" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -170,7 +170,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
             />
           )}
 
-          <div className="flex gap-6">
+          <div className="flex flex-row flex-wrap gap-x-6 pb-2 items-start">
             <FormField
               control={form.control}
               name="language"
@@ -180,7 +180,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
                   <FormControl>
                     <Input type="text" placeholder="en" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -195,7 +195,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
                   <FormControl>
                     <Input placeholder="Ex: Ficção, Autoajuda" {...field} />
                   </FormControl>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -219,7 +219,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
             )}
           />
 
-          <div className="w-1/2 mx-auto">
+          <div className="w-1/2 pb-2 mx-auto">
             <FormField
               control={form.control}
               name="status"
@@ -238,7 +238,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
                       <SelectItem value="enviado">Enviado</SelectItem>
                     </SelectContent>
                   </Select>
-                  <div className="min-h-[1.25rem]">
+                  <div className="min-h-2">
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -262,7 +262,7 @@ export function ArticleForm({ onSuccess, setArticleList }: ArticleFormProps) {
             )}
           />
 
-          <div className="flex justify-end gap-4">
+          <div className="flex justify-end  gap-4">
             <Button type="button" variant="outline" onClick={() => onSuccess?.()}>
               Cancelar
             </Button>
