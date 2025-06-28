@@ -40,12 +40,11 @@ export function LoginComponent({ setIsLogin }: Props) {
 
     if (token) {
       localStorage.setItem("token", token);
-      setIsLoading(false);
-
       router.push("/dashboard");
     } else {
       console.error("Token não recebido");
     }
+    setIsLoading(false);
   };
 
   if (isLoading) {
