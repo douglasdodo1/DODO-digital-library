@@ -8,7 +8,6 @@ import { Input } from "./ui/input";
 import { AuthDto } from "@/dtos/auth-dto";
 import { auth } from "@/graphql/user/mutations/auth";
 import { useRouter } from "next/navigation";
-import { set } from "zod";
 import { Label } from "./ui/label";
 
 interface Props {
